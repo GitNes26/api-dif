@@ -20,7 +20,7 @@ class MenuController extends Controller
         try {
             $list = Menu::where('active', true)
                 ->orderBy('id', 'desc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -41,7 +41,7 @@ class MenuController extends Controller
             $list = Menu::where('active', true)
                 ->select('id as id', 'cycle_name as label')
                 ->orderBy('cycle_name', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -68,7 +68,7 @@ class MenuController extends Controller
 
             $settings->save();
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? "satisfactoria | menus actualizadas" : 'satisfactoria | menus registradas.';
             $response->data["alert_text"] = $id > 0 ? "Configuración actualizada" : "Configuración registrada";
             $response->data["result"] = $settings;
@@ -103,7 +103,7 @@ class MenuController extends Controller
 
             $settings->save();
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? "satisfactoria | ciclo actualizado" : 'satisfactoria | ciclo registrado.';
             $response->data["alert_text"] = $id > 0 ? "Ajustes actualizado" : "Ajustes registrado, ya puedes realizar la configuración";
             $response->data["result"] = $settings;
@@ -133,7 +133,7 @@ class MenuController extends Controller
             // $deleteIds = explode(',', $ids);
             $countDeleted = sizeof($request->ids);
             Menu::whereIn('id', $request->ids)->delete();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | configuración eliminados ($countDeleted).";
             $response->data["alert_text"] = "Documentos de Becas eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
@@ -157,7 +157,7 @@ class MenuController extends Controller
         try {
             $settings = Menu::find($request->id);
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | configuración encontrados.';
             $response->data["result"] = $settings;
         } catch (\Exception $ex) {
@@ -184,7 +184,7 @@ class MenuController extends Controller
                     'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s'),
                 ]);
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | configuración eliminada.';
             $response->data["alert_text"] = 'Documentos de Becas eliminados';
         } catch (\Exception $ex) {
@@ -211,7 +211,7 @@ class MenuController extends Controller
             // echo $settings->toSql();
             if ((bool)$internal) return $settings;
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | configuración actual.';
             $response->data["result"] = $settings;
         } catch (\Exception $ex) {

@@ -41,10 +41,7 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
 
             throw ValidationException::withMessages([
-                'message' => 'Credenciales incorrectas',
-                'alert_title' => 'Credenciales incorrectas',
-                'alert_text' => 'Credenciales incorrectas',
-                'alert_icon' => 'error',
+                'message' => 'Credenciales incorrectas'
             ]);
         }
         $token = $user->createToken($user->email, [$user->role])->plainTextToken;

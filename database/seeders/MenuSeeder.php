@@ -54,7 +54,7 @@ class MenuSeeder extends Seeder
         $order = 0;
         DB::table('menus')->insert([ #4
             'menu' => 'Configuraciones',
-            'caption' => 'Configuración del sistema y Control de usuarios y roles',
+            'caption' => 'Control del sistema, usuarios y roles',
             'type' => 'group',
             'belongs_to' => 0,
             'order' => 2,
@@ -116,7 +116,7 @@ class MenuSeeder extends Seeder
         $order = 0;
         DB::table('menus')->insert([ #10
             'menu' => 'Catalogos',
-            'caption' => 'Gestion de Catalogos',
+            'caption' => 'Gestión de Catalogos',
             'type' => 'group',
             'belongs_to' => 0,
             'order' => 3,

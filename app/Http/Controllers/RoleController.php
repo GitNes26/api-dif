@@ -21,7 +21,7 @@ class RoleController extends Controller
         try {
             $list = Role::where("id", ">=", $role_id)
                 ->orderBy('roles.id', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria. Lista de roles:';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -42,7 +42,7 @@ class RoleController extends Controller
             $list = Role::where('active', true)->where("id", ">=", $role_id)
                 ->select('roles.id as id', 'roles.role as label')
                 ->orderBy('roles.id', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria. Lista de roles:';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -74,7 +74,7 @@ class RoleController extends Controller
                 'update' => $request->update,
                 'delete' => $request->delete,
             ]);
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | rol registrado.';
             $response->data["alert_text"] = 'rol registrado';
         } catch (\Exception $ex) {
@@ -96,7 +96,7 @@ class RoleController extends Controller
         try {
             $role = Role::find($request->id);
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | rol encontrado.';
             $response->data["result"] = $role;
         } catch (\Exception $ex) {
@@ -130,7 +130,7 @@ class RoleController extends Controller
 
             $role->save();
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | rol actualizado.';
             $response->data["alert_text"] = 'Rol actualizado';
         } catch (\Exception $ex) {
@@ -155,7 +155,7 @@ class RoleController extends Controller
                     'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s'),
                 ]);
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | rol eliminado.';
             $response->data["alert_text"] = 'Rol eliminado';
         } catch (\Exception $ex) {
@@ -180,7 +180,7 @@ class RoleController extends Controller
                 ]);
 
             $description = $active == "0" ? 'desactivado' : 'reactivado';
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | rol $description.";
             $response->data["alert_text"] = "Rol $description";
         } catch (\Exception $ex) {
@@ -210,7 +210,7 @@ class RoleController extends Controller
 
             DB::table('personal_access_tokens')->where('abilities', $role->role)->delete();
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | permisos actualizado.';
             $response->data["alert_text"] = 'Permisos actualizados';
         } catch (\Exception $ex) {

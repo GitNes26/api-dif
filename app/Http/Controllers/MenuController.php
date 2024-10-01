@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\DB;
 class MenuController extends Controller
 {
     /**
-     * Mostrar lista de menus por rol activos.
+     * Mostrar lista de menus por rol activos para acomodar en el menu lateral.
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function MenusByRole(String $pages_read, Response $response)
+    public function getMenusByRole(String $pages_read, Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -29,7 +29,7 @@ class MenuController extends Controller
                     ->whereIn("menus.id", $menus_ids)
                     ->orderBy('menus.order', 'asc')->get();
             }
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus por rol.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -48,7 +48,7 @@ class MenuController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $menu = Menu::where('url', $request->url)->where('active', 1)->select("id")->first();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $menu;
         } catch (\Exception $ex) {
@@ -69,7 +69,7 @@ class MenuController extends Controller
             $list = Menu::where('active', true)->where('belongs_to', 0)
                 ->select('menus.id as id', 'menus.menu as label')
                 ->orderBy('menus.menu', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -94,7 +94,7 @@ class MenuController extends Controller
                 ]);
 
             $description = $active == "0" ? 'desactivado' : 'reactivado';
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | menu $description.";
             $response->data["alert_text"] = "Menú $description";
         } catch (\Exception $ex) {
@@ -116,7 +116,7 @@ class MenuController extends Controller
             $list = Menu::leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
                 ->select('menus.*', 'patern.menu as patern')
                 ->orderBy('menus.id', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -137,7 +137,7 @@ class MenuController extends Controller
             $list = Menu::where('active', true)
                 ->select('menus.id as id', 'menus.menu as label')
                 ->orderBy('menus.menu', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -156,7 +156,7 @@ class MenuController extends Controller
                     DB::raw("CONCAT(patern.menu,' : ', menus.menu) as label")
                 )
                 ->orderBy('menus.menu', 'asc')->get();
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
@@ -210,7 +210,7 @@ class MenuController extends Controller
             // $menu->save();
 
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
 
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | menu editado.' : 'peticion satisfactoria | menu registrado.';
             $response->data["alert_text"] = $id > 0 ? "Menú editado" : "Menú registrado";
@@ -243,7 +243,7 @@ class MenuController extends Controller
 
             if ($internal) return $menu;
 
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | menu encontrado.';
             $response->data["result"] = $menu;
         } catch (\Exception $ex) {
@@ -269,7 +269,7 @@ class MenuController extends Controller
                     'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s'),
                 ]);
-            $response->data = ObjResponse::CorrectResponse();
+            $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | menu eliminado.';
             $response->data["alert_text"] = 'Menú eliminado';
         } catch (\Exception $ex) {
