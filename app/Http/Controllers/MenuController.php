@@ -62,7 +62,7 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function headersSelectIndex(Response $response)
+    public function getHeadersMenusSelect(Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
