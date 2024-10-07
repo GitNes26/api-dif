@@ -79,6 +79,39 @@ class MenuController extends Controller
     }
 
     /**
+     * Mostrar lista de menus.
+     *
+     * @return \Illuminate\Http\Response $response
+     */
+    public function index(Response $response)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $list = Menu::leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
+                ->select('menus.*', 'patern.menu as patern')
+                ->orderBy('menus.id', 'asc')->get();
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
+            $response->data["result"] = $list;
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * "Activar o Desactivar" (cambiar estado activo) menu.
      *
      * @param  int $id
@@ -104,26 +137,7 @@ class MenuController extends Controller
     }
     //#region CRUD
 
-    /**
-     * Mostrar lista de menus activos.
-     *
-     * @return \Illuminate\Http\Response $response
-     */
-    public function index(Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            $list = Menu::leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
-                ->select('menus.*', 'patern.menu as patern')
-                ->orderBy('menus.id', 'asc')->get();
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
-            $response->data["result"] = $list;
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
+
 
     /**
      * Mostrar listado para un selector.
