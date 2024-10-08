@@ -56,7 +56,7 @@ class MenuController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
-    public function createOrUpdate(Request $request, Response $response, Int $id = null, bool $internal = false)
+    public function createOrUpdatex(Request $request, Response $response, Int $id = null, bool $internal = false)
     {
         try {
             $response->data = ObjResponse::DefaultResponse();

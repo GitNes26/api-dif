@@ -99,6 +99,65 @@ class MenuController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
+    /**
+     * Crear o Actualizar menu.
+     *
+     * @return \Illuminate\Http\Response $response
+     */
+    public function createOrUpdate(Request $request, Response $response, Int $id = null)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            // $duplicate = $this->validateAvailableData($request->menu, $id);
+            // if ($duplicate["result"] == true) {
+            //     return $duplicate;
+            // }
+
+            $menu = Menu::find($id);
+            if (!$menu) $menu = new Menu();
+            $menu->fill($request->all());
+
+            $menu->save();
+            // $menu->menu = $request->menu;
+            // $menu->caption = $request->caption;
+            // $menu->type = $request->type;
+            // $menu->belongs_to = $request->belongs_to;
+            // if ($request->url) $menu->url = $request->url;
+            // if ($request->icon) $menu->icon = $request->icon;
+            // $menu->order = $request->order;
+            // $menu->others_permissions = $request->others_permissions;
+            // $menu->show_counter = (bool)$request->show_counter;
+            // $menu->read_only = (bool)$request->read_only;
+            // $menu->counter_name = $request->counter_name;
+            // $menu->active = (bool)$request->active;
+
+            // $menu->save();
+
+            // $new_others_permissions = "";
+            // if (strlen($request->others_permissions) > 1) {
+            //     $others_permissions = explode(",", $request->others_permissions);
+            //     foreach ($others_permissions as $op) {
+            //         $trim_op = trim($op);
+            //         $new_others_permissions .= "$menu->id@$trim_op, ";
+            //     }
+            //     rtrim($new_others_permissions, ", ");
+            //     return $new_others_permissions;
+            // }
+            // if ($request->others_permissions) $menu->others_permissions = $request->others_permissions;
+            // $menu->save();
+
+
+            $response->data = ObjResponse::SuccessResponse();
+
+            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | menu editado.' : 'peticion satisfactoria | menu registrado.';
+            $response->data["alert_text"] = $id > 0 ? "Menú editado" : "Menú registrado";
+        } catch (\Exception $ex) {
+            error_log("Hubo un error al crear o actualizar el menu ->" . $ex->getMessage());
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
 
 
 
@@ -179,61 +238,7 @@ class MenuController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
-    /**
-     * Crear o Actualizar prestamo de menu.
-     *
-     * @return \Illuminate\Http\Response $response
-     */
-    public function createOrUpdate(Request $request, Response $response, Int $id = null)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            // $duplicate = $this->validateAvailableData($request->menu, $id);
-            // if ($duplicate["result"] == true) {
-            //     return $duplicate;
-            // }
 
-            $menu = Menu::find($id);
-            if (!$menu) $menu = new Menu();
-            $menu->menu = $request->menu;
-            $menu->caption = $request->caption;
-            $menu->type = $request->type;
-            $menu->belongs_to = $request->belongs_to;
-            if ($request->url) $menu->url = $request->url;
-            if ($request->icon) $menu->icon = $request->icon;
-            $menu->order = $request->order;
-            $menu->others_permissions = $request->others_permissions;
-            $menu->show_counter = (bool)$request->show_counter;
-            $menu->read_only = (bool)$request->read_only;
-            $menu->counter_name = $request->counter_name;
-            $menu->active = (bool)$request->active;
-
-            $menu->save();
-
-            // $new_others_permissions = "";
-            // if (strlen($request->others_permissions) > 1) {
-            //     $others_permissions = explode(",", $request->others_permissions);
-            //     foreach ($others_permissions as $op) {
-            //         $trim_op = trim($op);
-            //         $new_others_permissions .= "$menu->id@$trim_op, ";
-            //     }
-            //     rtrim($new_others_permissions, ", ");
-            //     return $new_others_permissions;
-            // }
-            // if ($request->others_permissions) $menu->others_permissions = $request->others_permissions;
-            // $menu->save();
-
-
-            $response->data = ObjResponse::SuccessResponse();
-
-            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | menu editado.' : 'peticion satisfactoria | menu registrado.';
-            $response->data["alert_text"] = $id > 0 ? "Menú editado" : "Menú registrado";
-        } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el menu ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
 
 
     /**

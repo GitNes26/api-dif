@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix("menus")->group(function () {
         Route::get("/", [MenuController::class, 'index']);
         Route::get("/getMenusByRole/{pages_read}", [MenuController::class, 'getMenusByRole']);
-        
         Route::get("/getHeadersMenusSelect", [MenuController::class, 'getHeadersMenusSelect']);
+        Route::post("/createOrUpdate/{id?}", [MenuController::class, 'createOrUpdate']);
     });
 });
