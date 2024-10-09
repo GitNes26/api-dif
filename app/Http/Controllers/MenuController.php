@@ -19,6 +19,7 @@ class MenuController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+
             $list = Menu::where('menus.active', true)
                 ->orderBy('menus.order', 'asc')->get();
             if ($pages_read != "todas") {
@@ -158,6 +159,35 @@ class MenuController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
+    /**
+     * Mostrar menu.
+     *
+     * @param   int $id
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response $response
+     */
+    public function show(Request $request, Response $response, Int $id, bool $internal = false)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $id_menu = $request->id;
+            if ($internal == 1) $id_menu = $request->page_index;
+            $menu = Menu::where('menus.id', $id_menu)
+                ->leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
+                ->select('menus.*', 'patern.menu as patern')
+                ->first();
+
+            if ($internal) return $menu;
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'peticion satisfactoria | menu encontrado.';
+            $response->data["result"] = $menu;
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
 
 
 
@@ -241,35 +271,7 @@ class MenuController extends Controller
 
 
 
-    /**
-     * Mostrar menu.
-     *
-     * @param   int $id
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response $response
-     */
-    public function show(Request $request, Response $response, Int $id, bool $internal = false)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            // return "el internal " . (bool)$internal;
-            $id_menu = $request->id;
-            if ($internal == 1) $id_menu = $request->page_index;
-            $menu = Menu::where('menus.id', $id_menu)
-                ->leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
-                ->select('menus.*', 'patern.menu as patern')
-                ->first();
-
-            if ($internal) return $menu;
-
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | menu encontrado.';
-            $response->data["result"] = $menu;
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
+    
 
 
     /**
