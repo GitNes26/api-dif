@@ -119,20 +119,6 @@ class MenuController extends Controller
             $menu->fill($request->all());
 
             $menu->save();
-            // $menu->menu = $request->menu;
-            // $menu->caption = $request->caption;
-            // $menu->type = $request->type;
-            // $menu->belongs_to = $request->belongs_to;
-            // if ($request->url) $menu->url = $request->url;
-            // if ($request->icon) $menu->icon = $request->icon;
-            // $menu->order = $request->order;
-            // $menu->others_permissions = $request->others_permissions;
-            // $menu->show_counter = (bool)$request->show_counter;
-            // $menu->read_only = (bool)$request->read_only;
-            // $menu->counter_name = $request->counter_name;
-            // $menu->active = (bool)$request->active;
-
-            // $menu->save();
 
             // $new_others_permissions = "";
             // if (strlen($request->others_permissions) > 1) {
@@ -170,7 +156,7 @@ class MenuController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $id_menu = $request->id;
+            $id_menu = $id;
             if ($internal == 1) $id_menu = $request->page_index;
             $menu = Menu::where('menus.id', $id_menu)
                 ->leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
@@ -188,31 +174,20 @@ class MenuController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * "Activar o Desactivar" (cambiar estado activo) menu.
      *
      * @param  int $id
+     * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function DisEnableMenu(Int $id, Int $active, Response $response)
+    public function disEnable(Response $response,  Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
             Menu::where('id', $id)
                 ->update([
-                    'active' => (bool)$active
+                    'active' => $active === "reactivar" ? 1 : 0
                 ]);
 
             $description = $active == "0" ? 'desactivado' : 'reactivado';
@@ -224,6 +199,20 @@ class MenuController extends Controller
         }
         return response()->json($response, $response->data["status_code"]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //#region CRUD
 
 
@@ -271,7 +260,7 @@ class MenuController extends Controller
 
 
 
-    
+
 
 
     /**
