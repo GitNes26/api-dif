@@ -80,6 +80,35 @@ class MenuController extends Controller
     }
 
     /**
+     * Mostrar listado para el selector en Roles y Permisos,
+     * ayuda a determinar la ruta por defecto que tendra el rol .
+     *
+     * @return \Illuminate\Http\Response $response
+     */
+    public function selectIndexToRoles(Response $response)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $list = Menu::where('menus.active', true)->where('menus.belongs_to', '>', 0)
+                ->leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
+                ->select(
+                    "menus.id as id",
+                    DB::raw("CONCAT(patern.menu,' : ', menus.menu) as label")
+                )
+                ->orderBy('menus.menu', 'asc')->get();
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
+            $response->data["result"] = $list;
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+
+    //#region CRUD
+    /**
      * Mostrar lista de menus.
      *
      * @return \Illuminate\Http\Response $response
@@ -93,6 +122,27 @@ class MenuController extends Controller
                 ->orderBy('menus.id', 'asc')->get();
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
+            $response->data["result"] = $list;
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    /**
+     * Mostrar listado para un selector.
+     *
+     * @return \Illuminate\Http\Response $response
+     */
+    public function selectIndex(Response $response)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $list = Menu::where('active', true)
+                ->select('menus.id as id', 'menus.menu as label')
+                ->orderBy('menus.menu', 'asc')->get();
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
@@ -199,99 +249,17 @@ class MenuController extends Controller
         }
         return response()->json($response, $response->data["status_code"]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //#region CRUD
-
-
-
-    /**
-     * Mostrar listado para un selector.
-     *
-     * @return \Illuminate\Http\Response $response
-     */
-    public function selectIndex(Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            $list = Menu::where('active', true)
-                ->select('menus.id as id', 'menus.menu as label')
-                ->orderBy('menus.menu', 'asc')->get();
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
-            $response->data["result"] = $list;
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
-    public function selectIndexToRoles(Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            $list = Menu::where('menus.active', true)->where('menus.belongs_to', '>', 0)
-                ->leftJoin('menus as patern', 'menus.belongs_to', '=', 'patern.id')
-                ->select(
-                    "menus.id as id",
-                    DB::raw("CONCAT(patern.menu,' : ', menus.menu) as label")
-                )
-                ->orderBy('menus.menu', 'asc')->get();
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
-            $response->data["result"] = $list;
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
-
-
-
-
-
-
-
-    /**
-     * Eliminar (cambiar estado activo=false) menu.
-     *
-     * @param  int $id
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response $response
-     */
-    public function destroy(Request $request, Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            Menu::find($request->id)
-                ->update([
-                    'active' => false,
-                    'deleted_at' => date('Y-m-d H:i:s'),
-                ]);
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | menu eliminado.';
-            $response->data["alert_text"] = 'Menú eliminado';
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
     //#endregion CRUD
 
+    
+    /**
+     * Funcion para validar que campos no deben de duplicarse sus valores.
+     * 
+     * @return ObjRespnse|false
+     */
     private function validateAvailableData($menu, $id)
     {
-        $checkAvailable = new UserController();
+        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
         $duplicate = $checkAvailable->checkAvailableData('menus', 'menu', $menu, 'El nombre del menú', 'menu', $id, null);
         if ($duplicate["result"] == true) return $duplicate;

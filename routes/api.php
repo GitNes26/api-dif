@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
@@ -45,14 +46,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/", [MenuController::class, 'index']);
         Route::get("/getMenusByRole/{pages_read}", [MenuController::class, 'getMenusByRole']);
         Route::get("/getHeadersMenusSelect", [MenuController::class, 'getHeadersMenusSelect']);
+        Route::get("/selectIndexToRoles", [MenuController::class, 'selectIndexToRoles']);
         Route::post("/createOrUpdate/{id?}", [MenuController::class, 'createOrUpdate']);
         Route::get("/id/{id}", [MenuController::class, 'show']);
         Route::get("/disEnable/{id}/{active}", [MenuController::class, 'disEnable']);
     });
 
+    Route::prefix("roles")->group(function () {
+        Route::get("/", [RoleController::class, 'index']);
+        Route::get("/selectIndex", [RoleController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [RoleController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [RoleController::class, 'show']);
+        Route::get("/delete/{id}", [RoleController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [RoleController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [RoleController::class, 'deleteMultiple']);
+    });
+
     Route::prefix("users")->group(function () {
         Route::get("/", [UserController::class, 'index']);
-        Route::get("/indexByrole/{role_id}", [UserController::class, 'indexByrole']);
+        Route::get("/indexByRole/{role_id}", [UserController::class, 'indexByRole']);
         Route::get("/selectIndex", [UserController::class, 'selectIndex']);
         Route::post("/createOrUpdate/{id?}", [UserController::class, 'createOrUpdate']);
         Route::get("/id/{id}", [UserController::class, 'show']);

@@ -15,7 +15,7 @@ class MenuSeeder extends Seeder
     {
         $menuTable = array("id" => 1, "path" => "/");
         $menuSettings = array("id" => 4, "path" => "configuraciones");
-        $menuCatalogs = array("id" => 10, "path" => "catalogos");
+        $menuCatalogs = array("id" => 9, "path" => "catalogos");
 
         // DASHBOARD
         $order = 0;
@@ -92,17 +92,7 @@ class MenuSeeder extends Seeder
             'created_at' => now(),
         ]);
         $order += 1;
-        DB::table('menus')->insert([ #8 Respuestas y puntajes
-            'menu' => 'Respuestas y Puntajes',
-            'type' => 'item',
-            'belongs_to' => $menuSettings["id"],
-            'url' => "/app/$menuSettings[path]/respuestas-y-puntajes",
-            'icon' => 'IconAbacus',
-            'order' => $order,
-            'created_at' => now(),
-        ]);
-        $order += 1;
-        DB::table('menus')->insert([ #9 Ajustes
+        DB::table('menus')->insert([ #8 Ajustes
             'menu' => 'Ajustes',
             'type' => 'item',
             'belongs_to' => $menuSettings["id"],
@@ -114,7 +104,7 @@ class MenuSeeder extends Seeder
 
         // Catalogos
         $order = 0;
-        DB::table('menus')->insert([ #10
+        DB::table('menus')->insert([ #9
             'menu' => 'Catalogos',
             'caption' => 'Gestión de Catalogos',
             'type' => 'group',
@@ -123,7 +113,7 @@ class MenuSeeder extends Seeder
             'created_at' => now(),
         ]);
         $order += 1;
-        DB::table('menus')->insert([ #11 Departamentos
+        DB::table('menus')->insert([ #10 Departamentos
             'menu' => 'Departamentos',
             'type' => 'item',
             'belongs_to' => $menuCatalogs["id"],

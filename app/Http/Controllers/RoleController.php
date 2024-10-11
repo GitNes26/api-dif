@@ -6,23 +6,27 @@ use App\Models\Role;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
     /**
-     * Mostrar lista de roles activos.
+     * Mostrar lista de roles.
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function index(Int $role_id, Response $response)
+    public function index(Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Role::where("id", ">=", $role_id)
-                ->orderBy('roles.id', 'asc')->get();
+            $roleAuth = Auth::user()->role_id;
+            $list = Role::where("active", true)->where("id", "<=", $roleAuth)
+                ->orderBy('id', 'desc')
+                ->get();
+
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria. Lista de roles:';
+            $response->data["message"] = 'Peticion satisfactoria | Lista de roles.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
@@ -35,16 +39,20 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function selectIndex(Int $role_id, Response $response)
+    public function selectIndex(Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Role::where('active', true)->where("id", ">=", $role_id)
-                ->select('roles.id as id', 'roles.role as label')
-                ->orderBy('roles.id', 'asc')->get();
+            $roleAuth = Auth::user()->role_id;
+            $list = Role::where('active', true)
+                ->select('id as id', 'role as label')
+                ->orderBy('role', 'asc')->get();
+
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria. Lista de roles:';
+            $response->data["message"] = 'peticion satisfactoria | lista de roles.';
+            $response->data["alert_text"] = "roles encontrados";
             $response->data["result"] = $list;
+            $response->data["toast"] = false;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -52,32 +60,33 @@ class RoleController extends Controller
     }
 
     /**
-     * Crear rol.
+     * Crear o Actualizar rol.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     * @param Int $id
+     * 
      * @return \Illuminate\Http\Response $response
      */
-    public function create(Request $request, Response $response)
+    public function createOrUpdate(Request $request, Response $response, Int $id = null)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            $duplicate = $this->validateAvailableData($request->role, $request->email, $request->id);
+            if ($duplicate["result"] == true) {
+                $response->data = $duplicate;
+                return response()->json($response);
+            }
 
-            $menuController = new MenuController();
-            $menu = $menuController->show($request, $response, 0, true);
+            $rol = Rol::find($request->id);
+            if (!$rol) $rol = new Rol();
+            $rol->fill($request->all());
+            $rol->save();
 
-            $new_role = Role::create([
-                'role' => $request->role,
-                'description' => $request->description,
-                'page_index' => $menu->url,
-                'read' => $request->read,
-                'create' => $request->create,
-                'update' => $request->update,
-                'delete' => $request->delete,
-            ]);
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | rol registrado.';
-            $response->data["alert_text"] = 'rol registrado';
+            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | rol editado.' : 'peticion satisfactoria | rol registrado.';
+            $response->data["alert_text"] = $id > 0 ? "Rol editado" : "Rol registrado";
         } catch (\Exception $ex) {
+            error_log("Hubo un error al crear o actualizar el rol ->" . $ex->getMessage());
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
         return response()->json($response, $response->data["status_code"]);
@@ -90,74 +99,19 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
-    public function show(Request $request, Response $response)
+    public function show(Request $request, Response $response, Int $id, bool $internal = false)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $role = Role::find($request->id);
+            $id_rol = $id;
+            // if ($internal == 1) $id_rol = $request->page_index;
+            $rol = Role::find($id_rol);
+
+            if ($internal) return $rol;
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | rol encontrado.';
-            $response->data["result"] = $role;
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
-
-    /**
-     * Actualizar rol.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response $response
-     */
-    public function update(Request $request, Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            $menuController = new MenuController();
-            $menu = $menuController->show($request, $response, 0, true);
-
-            $role = Role::find($request->id);
-            $role->role = $request->role;
-            $role->description = $request->description;
-            $role->page_index = $menu->url;
-            $role->read = $request->read;
-            $role->create = $request->create;
-            $role->update = $request->update;
-            $role->delete = $request->delete;
-            $role->active = (bool)$request->active;
-
-            $role->save();
-
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | rol actualizado.';
-            $response->data["alert_text"] = 'Rol actualizado';
-        } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
-        }
-        return response()->json($response, $response->data["status_code"]);
-    }
-
-    /**
-     * Eliminar (cambiar estado activo=false) rol.
-     *
-     * @param  int $id
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response $response
-     */
-    public function destroy(Request $request, Response $response)
-    {
-        $response->data = ObjResponse::DefaultResponse();
-        try {
-            Role::find($request->id)
-                ->update([
-                    'active' => false,
-                    'deleted_at' => date('Y-m-d H:i:s'),
-                ]);
-            $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | rol eliminado.';
-            $response->data["alert_text"] = 'Rol eliminado';
+            $response->data["result"] = $rol;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -168,15 +122,17 @@ class RoleController extends Controller
      * "Activar o Desactivar" (cambiar estado activo) rol.
      *
      * @param  int $id
+     * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function disEnableRole(Int $id, Int $active, Response $response)
+    public function delete(Response $response,  Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            Role::where('id', $id)
+            Rol::where('id', $id)
                 ->update([
-                    'active' => (bool)$active
+                    'active' => $active === "reactivar" ? 1 : 0,
+                    'deleted_at' => date('Y-m-d H:i:s')
                 ]);
 
             $description = $active == "0" ? 'desactivado' : 'reactivado';
@@ -190,32 +146,69 @@ class RoleController extends Controller
     }
 
     /**
-     * Actualizar permisos.
+     * "Activar o Desactivar" (cambiar estado activo) rol.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function updatePermissions(Request $request, Response $response)
+    public function disEnable(Response $response,  Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $role = Role::find($request->id);
-            $role->read = $request->read;
-            $role->create = $request->create;
-            $role->update = $request->update;
-            $role->delete = $request->delete;
-            $role->more_permissions = $request->more_permissions;
+            Rol::where('id', $id)
+                ->update([
+                    'active' => $active === "reactivar" ? 1 : 0
+                ]);
 
-            $role->save();
-
-            DB::table('personal_access_tokens')->where('abilities', $role->role)->delete();
-
+            $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | permisos actualizado.';
-            $response->data["alert_text"] = 'Permisos actualizados';
+            $response->data["message"] = "peticion satisfactoria | rol $description.";
+            $response->data["alert_text"] = "Rol $description";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
         return response()->json($response, $response->data["status_code"]);
+    }
+
+    /**
+     * Eliminar uno o varios roles.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response $response
+     */
+    public function deleteMultiple(Request $request, Response $response)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            // echo "$request->ids";
+            // $deleteIds = explode(',', $ids);
+            $countDeleted = sizeof($request->ids);
+            Rol::whereIn('id', $request->ids)->update([
+                'active' => false,
+                'deleted_at' => date('Y-m-d H:i:s'),
+            ]);
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | rol eliminado.' : "peticion satisfactoria | roles eliminados ($countDeleted).";
+            $response->data["alert_text"] = $countDeleted == 1 ? 'Rol eliminado' : "Roles eliminados  ($countDeleted)";
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+
+    /**
+     * Funcion para validar que campos no deben de duplicarse sus valores.
+     * 
+     * @return ObjRespnse|false
+     */
+    private function validateAvailableData($role, $id)
+    {
+        $checkAvailable = new Controller();
+        // #VALIDACION DE DATOS REPETIDOS
+        $duplicate = $this->checkAvailableData('roles', 'role', $role, 'El nombre de rol', 'role', $id, null);
+        if ($duplicate["result"] == true) return $duplicate;
+        return array("result" => false);
     }
 }
