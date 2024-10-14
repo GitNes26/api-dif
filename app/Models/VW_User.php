@@ -14,6 +14,16 @@ class VW_User extends Model
     protected $table = 'vw_users';
 
     /**
+     * Los atributos que deben ocultarse para la serialización.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
      * LlavePrimaria asociada a la tabla.
      * @var string
      */

@@ -109,7 +109,7 @@ class UserController extends Controller
             $user = User::find($request->id);
             if (!$user) $user = new User();
             $user->fill($request->only(['email', 'username', 'password', 'role_id']));
-            if ((bool)$request->change_password && strlen($request->password) > 0) $user->password = Hash::make($request->password);
+            if ((bool)$request->changePassword && strlen($request->password) > 0) $user->password = Hash::make($request->password);
             $user->save();
 
             $response->data = ObjResponse::SuccessResponse();
