@@ -60,6 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [RoleController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [RoleController::class, 'disEnable']);
         Route::get("/deleteMultiple", [RoleController::class, 'deleteMultiple']);
+
+        Route::post("/updatePermissions", [RoleController::class, 'updatePermissions']);
+
     });
 
     Route::prefix("users")->group(function () {

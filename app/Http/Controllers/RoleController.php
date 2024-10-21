@@ -21,7 +21,7 @@ class RoleController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $roleAuth = Auth::user()->role_id;
-            $list = Role::where("active", true)->where("id", "<=", $roleAuth)
+            $list = Role::where("id", ">=", $roleAuth)
                 ->orderBy('id', 'desc')
                 ->get();
 
@@ -71,13 +71,13 @@ class RoleController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->role, $request->email, $request->id);
+            $duplicate = $this->validateAvailableData($request->role, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
             }
 
-            $rol = Rol::find($request->id);
+            $rol = Role::find($id);
             if (!$rol) $rol = new Rol();
             $rol->fill($request->all());
             $rol->save();
@@ -87,6 +87,36 @@ class RoleController extends Controller
             $response->data["alert_text"] = $id > 0 ? "Rol editado" : "Rol registrado";
         } catch (\Exception $ex) {
             error_log("Hubo un error al crear o actualizar el rol ->" . $ex->getMessage());
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    /**
+     * Actualizar permisos.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response $response
+     */
+    public function updatePermissions(Request $request, Response $response)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $role = Role::find($request->id);
+            $role->read = $request->read;
+            $role->create = $request->create;
+            $role->update = $request->update;
+            $role->delete = $request->delete;
+            $role->more_permissions = $request->more_permissions;
+
+            $role->save();
+
+            DB::table('personal_access_tokens')->where('abilities', $role->role)->delete();
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'peticion satisfactoria | permisos actualizado.';
+            $response->data["alert_text"] = 'Permisos actualizados';
+        } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
         return response()->json($response, $response->data["status_code"]);
@@ -129,7 +159,7 @@ class RoleController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            Rol::where('id', $id)
+            Role::where('id', $id)
                 ->update([
                     'active' => $active === "reactivar" ? 1 : 0,
                     'deleted_at' => date('Y-m-d H:i:s')
@@ -156,7 +186,7 @@ class RoleController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            Rol::where('id', $id)
+            Role::where('id', $id)
                 ->update([
                     'active' => $active === "reactivar" ? 1 : 0
                 ]);
@@ -184,7 +214,7 @@ class RoleController extends Controller
             // echo "$request->ids";
             // $deleteIds = explode(',', $ids);
             $countDeleted = sizeof($request->ids);
-            Rol::whereIn('id', $request->ids)->update([
+            Role::whereIn('id', $request->ids)->update([
                 'active' => false,
                 'deleted_at' => date('Y-m-d H:i:s'),
             ]);
@@ -207,7 +237,7 @@ class RoleController extends Controller
     {
         $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $this->checkAvailableData('roles', 'role', $role, 'El nombre de rol', 'role', $id, null);
+        $duplicate = $checkAvailable->checkAvailableData('roles', 'role', $role, 'El nombre de rol', 'role', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

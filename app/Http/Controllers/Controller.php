@@ -65,7 +65,7 @@ class Controller extends BaseController
             $query = "SELECT count(*) as duplicate FROM $table WHERE $column='$value' AND active=1";
             if ($id != null) $query = "SELECT count(*) as duplicate FROM $table WHERE $column='$value' AND active=1 AND id!=$id";
         }
-        //   echo $query;
+        // echo $query;
         $result = DB::select($query)[0];
         //   var_dump($result->duplicate);
         if ((int)$result->duplicate > 0) {

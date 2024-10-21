@@ -237,9 +237,9 @@ class UserController extends Controller
     {
         $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $this->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
+        $duplicate = $checkAvailable->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
-        $duplicate = $this->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
+        $duplicate = $checkAvailable->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }
