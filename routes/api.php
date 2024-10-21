@@ -23,7 +23,7 @@ use Illuminate\Validation\ValidationException;
 */
 
 Route::get('/', function (Request $request) {
-    return "API DIF";
+    return "API DIF :)";
 });
 
 Route::post('/login', [AuthController::class, 'login']);
