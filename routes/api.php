@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Models\ObjResponse;
@@ -62,7 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/deleteMultiple", [RoleController::class, 'deleteMultiple']);
 
         Route::post("/updatePermissions", [RoleController::class, 'updatePermissions']);
-
     });
 
     Route::prefix("users")->group(function () {
@@ -74,5 +74,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [UserController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [UserController::class, 'disEnable']);
         Route::get("/deleteMultiple", [UserController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("registers")->group(function () {
+        Route::get("/", [PersonalInfoController::class, 'index']);
+        Route::get("/selectIndex", [PersonalInfoController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [PersonalInfoController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [PersonalInfoController::class, 'show']);
+        Route::get("/delete/{id}", [PersonalInfoController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [PersonalInfoController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [PersonalInfoController::class, 'deleteMultiple']);
     });
 });
