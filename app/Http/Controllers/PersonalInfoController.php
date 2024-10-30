@@ -79,6 +79,11 @@ class PersonalInfoController extends Controller
             $personal_info->fill($request->all());
             $personal_info->save();
 
+            // $personal_info->ing_ine = $request->ing_ine;
+            $ing_ine = $this->ImageUp($request, 'ing_ine', "personal-info", $id, 'INE', $id == null ? true : false, "noImage.png");
+            if ($request->hasFile('ing_ine')) $personal_info->ing_ine = $ing_ine;
+            $personal_info->save();
+
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | informacion personal editada.' : 'peticion satisfactoria | informacion personal registrada.';
             $response->data["alert_text"] = $id > 0 ? "Información Personal editada" : "Información Personal registrada";

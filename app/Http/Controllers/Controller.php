@@ -13,6 +13,39 @@ class Controller extends BaseController
     // use AuthorizesRequests, ValidatesRequests;
 
     /**
+     * Funcion para guardar imagenes acorde al modelo.
+     * @param Request $request
+     * @param File $requestFile
+     * @param String $dirPath
+     * @param Number $id
+     * @param String $PosFix
+     * @param Boolean $crate
+     * @param String $nameFake
+     * 
+     * @return string
+     */
+    public function ImageUp($request, $requestFile, $dirPath, $id, $posFix, $create, $nameFake)
+    {
+        try {
+            $dir = public_path($dirPath);
+            $img_name = "";
+            if ($request->hasFile($requestFile)) {
+                // return "ImageUp->aqui todo bien 3";
+                $img_file = $request->file($requestFile);
+                $dir_path = "$dirPath/$id";
+                $destination = "$dir/$id";
+                $img_name = $this->ImgUpload($img_file, $destination, $dir_path, "$id-$posFix");
+            } else {
+                if ($create) $img_name = "$dirPath/$nameFake";
+            }
+            return $img_name;
+        } catch (\Exception $ex) {
+            $msg =  "Error al cargar imagen de documentos data: " . $ex->getMessage();
+            error_log("$msg");
+            return "$msg";
+        }
+    }
+    /**
      * Funcion para guardar una imagen en directorio fisico, elimina y guarda la nueva al editar la imagen para no guardar muchas
      * imagenes y genera el path que se guardara en la BD
      * 
