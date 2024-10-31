@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->string('category');
+            $table->text('description');
+            $table->text('process_flow')->comment("se refiere a el flujo por los departamentos que pasa la categoria");
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 

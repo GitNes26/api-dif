@@ -79,9 +79,11 @@ class PersonalInfoController extends Controller
             $personal_info->fill($request->all());
             $personal_info->save();
 
-            // $personal_info->ing_ine = $request->ing_ine;
-            $ing_ine = $this->ImageUp($request, 'ing_ine', "personal-info", $id, 'INE', $id == null ? true : false, "noImage.png");
-            if ($request->hasFile('ing_ine')) $personal_info->ing_ine = $ing_ine;
+            // $personal_info->img_ine = $request->img_ine;
+            $img_ine = $this->ImageUp($request, 'img_ine', "personal-info", $id, 'INE', $id == null ? true : false, "noImage.png");
+            if ($request->hasFile('img_ine')) $personal_info->img_ine = $img_ine;
+            $img_photo = $this->ImageUp($request, 'img_photo', "personal-info", $id, 'FOTO', $id == null ? true : false, "noImage.png");
+            if ($request->hasFile('img_photo')) $personal_info->img_photo = $img_photo;
             $personal_info->save();
 
             $response->data = ObjResponse::SuccessResponse();

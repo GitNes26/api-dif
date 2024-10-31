@@ -17,11 +17,16 @@ return new class extends Migration
             $table->string('plast_name');
             $table->string('mlast_name');
             $table->enum('gender', ["H", "M"]);
-            $table->integer('address_id');
             $table->string('email');
             $table->string('phone');
             $table->string('curp');
             $table->date('birthdate');
+            $table->integer('community_id');
+            $table->string('street');
+            $table->string('num_ext');
+            $table->string('num_int');
+            $table->string('img_ine');
+            $table->string('img_photo');
             // $table->string('voter_key');
             // $table->string('section');
             // $table->string('year_registration');

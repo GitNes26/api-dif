@@ -23,11 +23,14 @@ class PersonalInfo extends Model
         'plast_name',
         'mlast_name',
         'gender',
-        'address_id',
         'email',
         'phone',
         'curp',
         'birthdate',
+        'community_id',
+        'street',
+        'num_ext',
+        'num_int',
         'active',
     ];
 

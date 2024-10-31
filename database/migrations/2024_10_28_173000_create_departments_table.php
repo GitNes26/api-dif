@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
+            $table->string('department');
+            $table->text('description');
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 
