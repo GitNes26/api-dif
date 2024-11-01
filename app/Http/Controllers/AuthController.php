@@ -147,11 +147,10 @@ class AuthController extends Controller
      */
     private function validateAvailableData($username, $email, $id)
     {
-        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $checkAvailable->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
+        $duplicate = $this->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
-        $duplicate = $checkAvailable->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
+        $duplicate = $this->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

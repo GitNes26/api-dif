@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
@@ -74,6 +76,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [UserController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [UserController::class, 'disEnable']);
         Route::get("/deleteMultiple", [UserController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("categories")->group(function () {
+        Route::get("/", [CategoryController::class, 'index']);
+        Route::get("/selectIndex", [CategoryController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [CategoryController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [CategoryController::class, 'show']);
+        Route::get("/delete/{id}", [CategoryController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [CategoryController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [CategoryController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("departments")->group(function () {
+        Route::get("/", [DepartmentController::class, 'index']);
+        Route::get("/selectIndex", [DepartmentController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [DepartmentController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [DepartmentController::class, 'show']);
+        Route::get("/delete/{id}", [DepartmentController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [DepartmentController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [DepartmentController::class, 'deleteMultiple']);
     });
 
     Route::prefix("registers")->group(function () {

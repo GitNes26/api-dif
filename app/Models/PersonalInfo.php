@@ -31,6 +31,8 @@ class PersonalInfo extends Model
         'street',
         'num_ext',
         'num_int',
+        // 'img_ine',
+        // 'img_photo',
         'active',
     ];
 

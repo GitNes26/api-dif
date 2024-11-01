@@ -60,20 +60,20 @@ class PersonalInfoController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Int $id
-     * 
+     *
      * @return \Illuminate\Http\Response $response
      */
     public function createOrUpdate(Request $request, Response $response, Int $id = null)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->email, $request->phone, $request->id);
+            $duplicate = $this->validateAvailableData($request->email, $request->phone, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
             }
 
-            $personal_info = PersonalInfo::find($request->id);
+            $personal_info = PersonalInfo::find($id);
             if (!$personal_info) $personal_info = new PersonalInfo();
 
             $personal_info->fill($request->all());
@@ -107,9 +107,7 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $id_user = $id;
-            // if ($internal == 1) $id_user = $request->page_index;
-            $personal_info = PersonalInfo::find($id_user);
+            $personal_info = PersonalInfo::find($id);
             if ($internal) return $personal_info;
 
             $response->data = ObjResponse::SuccessResponse();
@@ -122,26 +120,25 @@ class PersonalInfoController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) informacion personal.
+     * "Eliminar" (cambiar estado activo=0) informacion personal.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function delete(Response $response,  Int $id, string $active)
+    public function delete(Response $response, Int $id)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
             PersonalInfo::where('id', $id)
                 ->update([
-                    'active' => $active === "reactivar" ? 1 : 0,
+                    'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s')
                 ]);
 
-            $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | informacion personal $description.";
-            $response->data["alert_text"] = "Información Personal $description";
+            $response->data["message"] = "peticion satisfactoria | informacion personal eliminada.";
+            $response->data["alert_text"] = "Información Personal eliminada";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -149,13 +146,13 @@ class PersonalInfoController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo).
+     * "Activar o Desactivar" (cambiar estado activo=1/0).
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function disEnable(Response $response,  Int $id, string $active)
+    public function disEnable(Response $response, Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -164,7 +161,7 @@ class PersonalInfoController extends Controller
                     'active' => $active === "reactivar" ? 1 : 0
                 ]);
 
-            $description = $active == "0" ? 'desactivado' : 'reactivado';
+            $description = $active == "0" ? 'desactivada' : 'reactivada';
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | informacion personal $description.";
             $response->data["alert_text"] = "Información Personal $description";
@@ -203,16 +200,15 @@ class PersonalInfoController extends Controller
 
     /**
      * Funcion para validar que campos no deben de duplicarse sus valores.
-     * 
+     *
      * @return ObjRespnse|false
      */
     private function validateAvailableData($email, $phone, $id)
     {
-        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $checkAvailable->checkAvailableData('personal_info', 'email', $email, 'El correo electrónico', 'email', $id, null);
+        $duplicate = $this->checkAvailableData('personal_info', 'email', $email, 'El correo electrónico', 'email', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
-        $duplicate = $checkAvailable->checkAvailableData('personal_info', 'phone', $phone, 'El número telefonico', 'phone', $id, null);
+        $duplicate = $this->checkAvailableData('personal_info', 'phone', $phone, 'El número telefonico', 'phone', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

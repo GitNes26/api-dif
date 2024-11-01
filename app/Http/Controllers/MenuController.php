@@ -225,13 +225,13 @@ class MenuController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) menu.
+     * "Activar o Desactivar" (cambiar estado activo=1/0) menu.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function disEnable(Response $response,  Int $id, string $active)
+    public function disEnable(Response $response, Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -251,7 +251,7 @@ class MenuController extends Controller
     }
     //#endregion CRUD
 
-    
+
     /**
      * Funcion para validar que campos no deben de duplicarse sus valores.
      * 
@@ -259,9 +259,8 @@ class MenuController extends Controller
      */
     private function validateAvailableData($menu, $id)
     {
-        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $checkAvailable->checkAvailableData('menus', 'menu', $menu, 'El nombre del menú', 'menu', $id, null);
+        $duplicate = $this->checkAvailableData('menus', 'menu', $menu, 'El nombre del menú', 'menu', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

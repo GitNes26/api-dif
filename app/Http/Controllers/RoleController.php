@@ -149,26 +149,25 @@ class RoleController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) rol.
+     * "Eliminar" (cambiar estado activo=0) rol.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function delete(Response $response,  Int $id, string $active)
+    public function delete(Response $response, Int $id)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
             Role::where('id', $id)
                 ->update([
-                    'active' => $active === "reactivar" ? 1 : 0,
+                    'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s')
                 ]);
 
-            $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | rol $description.";
-            $response->data["alert_text"] = "Rol $description";
+            $response->data["message"] = "peticion satisfactoria | rol eliminado.";
+            $response->data["alert_text"] = "Rol eliminado";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -176,13 +175,13 @@ class RoleController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) rol.
+     * "Activar o Desactivar" (cambiar estado activo=1/0) rol.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function disEnable(Response $response,  Int $id, string $active)
+    public function disEnable(Response $response, Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -235,9 +234,8 @@ class RoleController extends Controller
      */
     private function validateAvailableData($role, $id)
     {
-        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $checkAvailable->checkAvailableData('roles', 'role', $role, 'El nombre de rol', 'role', $id, null);
+        $duplicate = $this->checkAvailableData('roles', 'role', $role, 'El nombre de rol', 'role', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

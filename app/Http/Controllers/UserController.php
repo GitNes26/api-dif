@@ -100,13 +100,13 @@ class UserController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->username, $request->email, $request->id);
+            $duplicate = $this->validateAvailableData($request->username, $request->email, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
             }
 
-            $user = User::find($request->id);
+            $user = User::find($id);
             if (!$user) $user = new User();
             $user->fill($request->only(['email', 'username', 'password', 'role_id']));
             if ((bool)$request->changePassword && strlen($request->password) > 0) $user->password = Hash::make($request->password);
@@ -133,9 +133,9 @@ class UserController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $id_user = $id;
+            // $id_user = $id;
             // if ($internal == 1) $id_user = $request->page_index;
-            $user = VW_User::find($id_user);
+            $user = VW_User::find($id);
 
             if ($internal) return $user;
 
@@ -149,26 +149,25 @@ class UserController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) usuario.
+     * "Eliminar" (cambiar estado activo=0) usuario.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function delete(Response $response,  Int $id, string $active)
+    public function delete(Response $response, Int $id)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
             User::where('id', $id)
                 ->update([
-                    'active' => $active === "reactivar" ? 1 : 0,
+                    'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s')
                 ]);
 
-            $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | usuario $description.";
-            $response->data["alert_text"] = "Usuario $description";
+            $response->data["message"] = "peticion satisfactoria | usuario eliminado.";
+            $response->data["alert_text"] = "Usuario eliminado";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -176,13 +175,13 @@ class UserController extends Controller
     }
 
     /**
-     * "Activar o Desactivar" (cambiar estado activo) user.
+     * "Activar o Desactivar" (cambiar estado activo=1/0) user.
      *
      * @param  int $id
      * @param  int $active
      * @return \Illuminate\Http\Response $response
      */
-    public function disEnable(Response $response,  Int $id, string $active)
+    public function disEnable(Response $response, Int $id, string $active)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -235,11 +234,10 @@ class UserController extends Controller
      */
     private function validateAvailableData($username, $email, $id)
     {
-        $checkAvailable = new Controller();
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $checkAvailable->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
+        $duplicate = $this->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
-        $duplicate = $checkAvailable->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
+        $duplicate = $this->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }
