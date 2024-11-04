@@ -7,6 +7,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\Menu;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,13 +34,26 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/checkLoggedIn', function (Response $response) {
+    Route::post('/checkLoggedIn', function (Response $response, Request $request) {
         $response->data = ObjResponse::SuccessResponse();
         $id = Auth::user()->id;
-        if ($id < 1 || !$id)
+        if ($id < 1 || !$id) {
             throw ValidationException::withMessages([
                 'message' => false
             ]);
+        }
+        if ($request->url) {
+            $response->data = ObjResponse::DefaultResponse();
+            try {
+                $menu = Menu::where('url', $request->url)->where('active', 1)->select("id")->first();
+                $response->data = ObjResponse::SuccessResponse();
+                $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
+                $response->data["result"] = $menu;
+            } catch (\Exception $ex) {
+                $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            }
+            return response()->json($response, $response->data["status_code"]);
+        }
         return response()->json($response, $response->data["status_code"]);
     });
     Route::get('/logout', [AuthController::class, 'logout']);
