@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('category');
             $table->text('description');
-            $table->text('process_flow')->nullable(true)->comment("se refiere a el flujo por los departamentos que pasa la categoria");
+            $table->text('process_flow')->nullable()->comment("se refiere a el flujo por los departamentos que pasa la categoria");
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
