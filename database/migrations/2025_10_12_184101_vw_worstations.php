@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(
-            "CREATE OR REPLACE VIEW vw_users AS 
-            SELECT u.*, r.role FROM users u INNER JOIN roles r ON u.role_id=r.id;"
+            "CREATE OR REPLACE VIEW vw_workstations AS 
+            SELECT w.*, d.department FROM workstations w INNER JOIN departments d ON w.department_id=d.id;"
         );
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP VIEW IF EXISTS becas_view');
+        DB::statement('DROP VIEW IF EXISTS vw_workstations');
     }
 };

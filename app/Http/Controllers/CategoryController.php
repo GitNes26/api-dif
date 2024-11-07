@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -18,9 +19,10 @@ class CategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Category::where("active", true)
-                ->orderBy('id', 'desc')
-                ->get();
+            $auth = Auth::user();
+            $list = Category::orderBy('id', 'desc');
+            if ($auth->role_id > 1) $list = $list->where("active", true);
+            $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de categorias.';

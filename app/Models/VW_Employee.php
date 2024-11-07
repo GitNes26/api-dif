@@ -3,29 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 
-class VW_User extends Authenticatable
+class VW_Employee extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
     /**
      * Nombre de la tabla asociada al modelo.
      * @var string
      */
-    protected $table = 'vw_users';
+    protected $table = 'vw_employees';
 
     /**
      * Los atributos que deben ocultarse para la serialización.
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    // protected $hidden = [
+    //     'password',
+    //     'remember_token',
+    // ];
 
     /**
      * LlavePrimaria asociada a la tabla.

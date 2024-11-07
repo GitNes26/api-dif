@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('workstations', function (Blueprint $table) {
             $table->id();
-            $table->string('department');
-            $table->text('description')->nullable();
+            $table->string('workstation');
+            // $table->text('description')->nullable();
+            $table->foreignId('department_id')->constrained('departments');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('workstations');
     }
 };

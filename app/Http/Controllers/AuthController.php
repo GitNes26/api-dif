@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\ObjResponse;
+use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -31,11 +32,12 @@ class AuthController extends Controller
             $field => 'required',
             'password' => 'required'
         ]);
-        $user = User::where("users.$field", "$value")->where('users.active', 1)
-            ->join("roles", "users.role_id", "=", "roles.id")
-            ->select("users.*", "roles.role", "roles.read", "roles.create", "roles.update", "roles.delete", "roles.more_permissions", "roles.page_index")
-            ->orderBy('users.id', 'desc')
+        $user = VW_User::where("$field", "$value")->where('active', 1)
+            ->orderBy('id', 'desc')
             ->first();
+
+        // ->join("roles", "users.role_id", "=", "roles.id")
+        // ->select("users.*", "roles.role", "roles.read", "roles.create", "roles.update", "roles.delete", "roles.more_permissions", "roles.page_index")
 
 
         if (!$user || !Hash::check($request->password, $user->password)) {

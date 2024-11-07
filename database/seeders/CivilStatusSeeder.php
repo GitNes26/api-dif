@@ -13,27 +13,21 @@ class CivilStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('civil_statuses')->insert([
-            [
-                'civil_status' => 'Soltero',
+        $civil_statuses = [
+            "Soltero",
+            "Casado",
+            "Unión Libre",
+            "Divorciado",
+            "Viudo",
+        ];
+
+        $data = array_map(function ($civil_status) {
+            return [
+                'civil_status' => $civil_status,
                 'created_at' => now(),
-            ],
-            [
-                'civil_status' => 'Casado',
-                'created_at' => now(),
-            ],
-            [
-                'civil_status' => 'Unión Libre',
-                'created_at' => now(),
-            ],
-            [
-                'civil_status' => 'Divorciado',
-                'created_at' => now(),
-            ],
-            [
-                'civil_status' => 'Viudo',
-                'created_at' => now(),
-            ],
-        ]);
+            ];
+        }, $civil_statuses);
+
+        DB::table('civil_statuses')->insert($data);
     }
 }

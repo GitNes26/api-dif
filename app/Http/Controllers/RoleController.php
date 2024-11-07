@@ -44,7 +44,7 @@ class RoleController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $roleAuth = Auth::user()->role_id;
-            $list = Role::where('active', true)
+            $list = Role::where('active', true)->where("id", ">=", $roleAuth)
                 ->select('id as id', 'role as label')
                 ->orderBy('role', 'asc')->get();
 

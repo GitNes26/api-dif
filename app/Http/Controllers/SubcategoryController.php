@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\ObjResponse;
-use App\Models\PersonalInfo;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class PersonalInfoController extends Controller
+class SubcategoryController extends Controller
 {
     /**
-     * Mostrar lista de informacion personal.
+     * Mostrar lista de subcategorias.
      *
      * @return \Illuminate\Http\Response $response
      */
@@ -20,12 +20,12 @@ class PersonalInfoController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = PersonalInfo::orderBy('id', 'desc');
+            $list = Subcategory::orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'Peticion satisfactoria | Lista de informacion personal.';
+            $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
@@ -42,13 +42,13 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = PersonalInfo::where('active', true)
-                ->select('id as id', DB::raw("CONCAT(name,' ', plast_name,' ',mlast_name) as label"))
-                ->orderBy('name', 'asc')->get();
+            $list = Subcategory::where('active', true)
+                ->select('id as id', 'subcategory as label')
+                ->orderBy('subcategory', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | lista de informacion personal.';
-            $response->data["alert_text"] = "informacion personal encontrados";
+            $response->data["message"] = 'peticion satisfactoria | lista de subcategorias.';
+            $response->data["alert_text"] = "Subcategorias encontradas";
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
@@ -58,48 +58,41 @@ class PersonalInfoController extends Controller
     }
 
     /**
-     * Crear o Actualizar informacion personal.
+     * Crear o Actualizar subcategoria.
      *
      * @param \Illuminate\Http\Request $request
      * @param Int $id
-     *
+     * 
      * @return \Illuminate\Http\Response $response
      */
     public function createOrUpdate(Request $request, Response $response, Int $id = null)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->email, $request->phone, $id);
+            $duplicate = $this->validateAvailableData($request->subcategory, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
             }
 
-            $personal_info = PersonalInfo::find($id);
-            if (!$personal_info) $personal_info = new PersonalInfo();
+            $subcategory = Subcategory::find($id);
+            if (!$subcategory) $subcategory = new Subcategory();
 
-            $personal_info->fill($request->all());
-            $personal_info->save();
-
-            // $personal_info->img_ine = $request->img_ine;
-            $img_ine = $this->ImageUp($request, 'img_ine', "personal-info", $id, 'INE', $id == null ? true : false, "noImage.png");
-            if ($request->hasFile('img_ine')) $personal_info->img_ine = $img_ine;
-            $img_photo = $this->ImageUp($request, 'img_photo', "personal-info", $id, 'FOTO', $id == null ? true : false, "noImage.png");
-            if ($request->hasFile('img_photo')) $personal_info->img_photo = $img_photo;
-            $personal_info->save();
+            $subcategory->fill($request->all());
+            $subcategory->save();
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | informacion personal editada.' : 'peticion satisfactoria | informacion personal registrada.';
-            $response->data["alert_text"] = $id > 0 ? "Información Personal editada" : "Información Personal registrada";
+            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | subcategoria editada.' : 'peticion satisfactoria | subcategoria registrada.';
+            $response->data["alert_text"] = $id > 0 ? "Subcategoria editada" : "Subcategoria registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el informacion personal ->" . $ex->getMessage());
+            error_log("Hubo un error al crear o actualizar el subcategoria ->" . $ex->getMessage());
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
         return response()->json($response, $response->data["status_code"]);
     }
 
     /**
-     * Mostrar informacion personal.
+     * Mostrar subcategoria.
      *
      * @param   int $id
      * @param  \Illuminate\Http\Request $request
@@ -109,12 +102,12 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $personal_info = PersonalInfo::find($id);
-            if ($internal) return $personal_info;
+            $subcategory = Subcategory::find($id);
+            if ($internal) return $subcategory;
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | informacion personal encontrado.';
-            $response->data["result"] = $personal_info;
+            $response->data["message"] = 'peticion satisfactoria | subcategoria encontrada.';
+            $response->data["result"] = $subcategory;
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -122,7 +115,7 @@ class PersonalInfoController extends Controller
     }
 
     /**
-     * "Eliminar" (cambiar estado activo=0) informacion personal.
+     * "Eliminar" (cambiar estado activo=0) subcategoria.
      *
      * @param  int $id
      * @param  int $active
@@ -132,15 +125,15 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            PersonalInfo::where('id', $id)
+            Subcategory::where('id', $id)
                 ->update([
                     'active' => false,
                     'deleted_at' => date('Y-m-d H:i:s')
                 ]);
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | informacion personal eliminada.";
-            $response->data["alert_text"] = "Información Personal eliminada";
+            $response->data["message"] = "peticion satisfactoria | subcategoria eliminada.";
+            $response->data["alert_text"] = "Subcategoria eliminada";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -158,15 +151,15 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            PersonalInfo::where('id', $id)
+            Subcategory::where('id', $id)
                 ->update([
                     'active' => $active === "reactivar" ? 1 : 0
                 ]);
 
-            $description = $active == "0" ? 'desactivada' : 'reactivada';
+            $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | informacion personal $description.";
-            $response->data["alert_text"] = "Información Personal $description";
+            $response->data["message"] = "peticion satisfactoria | subcategoria $description.";
+            $response->data["alert_text"] = "Subcategoria $description";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -186,13 +179,13 @@ class PersonalInfoController extends Controller
             // echo "$request->ids";
             // $deleteIds = explode(',', $ids);
             $countDeleted = sizeof($request->ids);
-            PersonalInfo::whereIn('id', $request->ids)->update([
+            Subcategory::whereIn('id', $request->ids)->update([
                 'active' => false,
                 'deleted_at' => date('Y-m-d H:i:s'),
             ]);
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
-            $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminada' : "Registros eliminados  ($countDeleted)";
+            $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminado' : "Registros eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -202,15 +195,13 @@ class PersonalInfoController extends Controller
 
     /**
      * Funcion para validar que campos no deben de duplicarse sus valores.
-     *
+     * 
      * @return ObjRespnse|false
      */
-    private function validateAvailableData($email, $phone, $id)
+    private function validateAvailableData($subcategory, $id)
     {
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $this->checkAvailableData('personal_info', 'email', $email, 'El correo electrónico', 'email', $id, null);
-        if ($duplicate["result"] == true) return $duplicate;
-        $duplicate = $this->checkAvailableData('personal_info', 'phone', $phone, 'El número telefonico', 'phone', $id, null);
+        $duplicate = $this->checkAvailableData('subcategories', 'subcategory', $subcategory, 'La subcategoria', 'subcategory', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

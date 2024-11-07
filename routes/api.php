@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CivilStatusController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkstationController;
 use App\Models\Menu;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
@@ -102,6 +106,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/deleteMultiple", [CategoryController::class, 'deleteMultiple']);
     });
 
+    Route::prefix("subcategories")->group(function () {
+        Route::get("/", [SubcategoryController::class, 'index']);
+        Route::get("/selectIndex", [SubcategoryController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [SubcategoryController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [SubcategoryController::class, 'show']);
+        Route::get("/delete/{id}", [SubcategoryController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [SubcategoryController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [SubcategoryController::class, 'deleteMultiple']);
+    });
+
     Route::prefix("departments")->group(function () {
         Route::get("/", [DepartmentController::class, 'index']);
         Route::get("/selectIndex", [DepartmentController::class, 'selectIndex']);
@@ -110,6 +124,36 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [DepartmentController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [DepartmentController::class, 'disEnable']);
         Route::get("/deleteMultiple", [DepartmentController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("workstations")->group(function () {
+        Route::get("/", [WorkstationController::class, 'index']);
+        Route::get("/selectIndex", [WorkstationController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [WorkstationController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [WorkstationController::class, 'show']);
+        Route::get("/delete/{id}", [WorkstationController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [WorkstationController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [WorkstationController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("employees")->group(function () {
+        Route::get("/", [EmployeeController::class, 'index']);
+        Route::get("/selectIndex", [EmployeeController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [EmployeeController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [EmployeeController::class, 'show']);
+        Route::get("/delete/{id}", [EmployeeController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [EmployeeController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [EmployeeController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("civilStatuses")->group(function () {
+        Route::get("/", [CivilStatusController::class, 'index']);
+        Route::get("/selectIndex", [CivilStatusController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [CivilStatusController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [CivilStatusController::class, 'show']);
+        Route::get("/delete/{id}", [CivilStatusController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [CivilStatusController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [CivilStatusController::class, 'deleteMultiple']);
     });
 
     Route::prefix("registers")->group(function () {
