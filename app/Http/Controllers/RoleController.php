@@ -78,7 +78,7 @@ class RoleController extends Controller
             }
 
             $rol = Role::find($id);
-            if (!$rol) $rol = new Rol();
+            if (!$rol) $rol = new Role();
             $rol->fill($request->all());
             $rol->save();
 

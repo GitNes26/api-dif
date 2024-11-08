@@ -29,12 +29,12 @@ class MenuSeeder extends Seeder
         ]);
         $order += 1;
         DB::table('menus')->insert([ #2 Dashboard Administrativo
-            'menu' => 'Tablero',
+            'menu' => 'Noticias',
             'caption' => '',
             'type' => 'item',
             'belongs_to' => $menuTable["id"],
-            'url' => "/app",
-            'icon' => 'IconDashboard',
+            'url' => "/app/noticias",
+            'icon' => 'IconFileDollar',
             'order' => $order,
             'created_at' => now(),
         ]);
@@ -44,8 +44,8 @@ class MenuSeeder extends Seeder
             'caption' => '',
             'type' => 'item',
             'belongs_to' => $menuTable["id"],
-            'url' => "/app/noticias",
-            'icon' => 'IconFileDollar',
+            'url' => "/app",
+            'icon' => 'IconDashboard',
             'order' => $order,
             'created_at' => now(),
         ]);
@@ -118,6 +118,66 @@ class MenuSeeder extends Seeder
             'type' => 'item',
             'belongs_to' => $menuCatalogs["id"],
             'url' => "/app/$menuCatalogs[path]/departamentos",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #11 Puestos de trabajo
+            'menu' => 'Puestos de trabajo',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/puestos",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #12 Empleados
+            'menu' => 'Empleados',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/empleados",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #13 Categorias
+            'menu' => 'Categorias',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/categorias",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #14 Subcategorias
+            'menu' => 'Subcategorias',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/subcategorias",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #15 Estados Civiles
+            'menu' => 'Estados Civiles',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/estados-civiles",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #16 Ciudadanos
+            'menu' => 'Ciudadanos',
+            'type' => 'item',
+            'belongs_to' => $menuCatalogs["id"],
+            'url' => "/app/$menuCatalogs[path]/ciudadanos",
             'icon' => 'IconBuildingSkyscraper',
             'order' => $order,
             'created_at' => now(),

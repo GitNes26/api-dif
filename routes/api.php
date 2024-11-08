@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix("users")->group(function () {
         Route::get("/", [UserController::class, 'index']);
-        Route::get("/indexByRole/{role_id}", [UserController::class, 'indexByRole']);
+        Route::get("/selectIndexByRole/{role_id}", [UserController::class, 'selectIndexByRole']);
         Route::get("/selectIndex", [UserController::class, 'selectIndex']);
         Route::post("/createOrUpdate/{id?}", [UserController::class, 'createOrUpdate']);
         Route::get("/id/{id}", [UserController::class, 'show']);

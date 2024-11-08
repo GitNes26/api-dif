@@ -42,7 +42,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function indexByRole(Response $response, Int $role_id)
+    public function selectIndexByRole(Response $response, Int $role_id)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -51,6 +51,7 @@ class UserController extends Controller
             $signo = $role_id == 2 && $roleAuth == 1 ? "<=" : "=";
 
             $list = VW_User::where('active', true)->where("role_id", $signo, $role_id)
+                ->select('id as id', 'username as label')
                 ->orderBy('id', 'desc')
                 ->get();
 
@@ -74,7 +75,7 @@ class UserController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $list = VW_User::where('active', true)
-                ->select('id as id', 'username as label')
+                ->select('id as id', 'username as label', 'role_id', 'role')
                 ->orderBy('username', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();

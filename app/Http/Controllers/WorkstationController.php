@@ -202,7 +202,7 @@ class WorkstationController extends Controller
     private function validateAvailableData($workstation, $id)
     {
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $this->checkAvailableData('worstations', 'workstation', $workstation, 'El puesto', 'workstation', $id, null);
+        $duplicate = $this->checkAvailableData('workstations', 'workstation', $workstation, 'El puesto', 'workstation', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

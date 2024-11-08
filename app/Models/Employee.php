@@ -34,7 +34,7 @@ class Employee extends Model
      * Nombre de la tabla asociada al modelo.
      * @var string
      */
-    protected $table = 'employee';
+    protected $table = 'employees';
 
     /**
      * LlavePrimaria asociada a la tabla.
