@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -30,6 +31,8 @@ class UserController extends Controller
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de usuarios.';
             $response->data["result"] = $list;
+
+            // Http::get(route('api.notifications'));
         } catch (\Exception $ex) {
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
@@ -116,6 +119,8 @@ class UserController extends Controller
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | usuario editado.' : 'peticion satisfactoria | usuario registrado.';
             $response->data["alert_text"] = $id > 0 ? "Usuario editado" : "Usuario registrado";
+
+            // $this->notificationPush($response->data["alert_text"],$response->data["alert_icon"]);
         } catch (\Exception $ex) {
             error_log("Hubo un error al crear o actualizar el usuario ->" . $ex->getMessage());
             $response->data = ObjResponse::CatchResponse($ex->getMessage());

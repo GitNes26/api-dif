@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('situations', function (Blueprint $table) {
+        Schema::create('notifactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('personal_info_id')->constrained('personal_info');
-            $table->text("affair")->nullable();
-            $table->foreignId('subcategory_id')->constrained('subcategory');
-            $table->foreignId('employee_id')->constrained('employees');
+            $table->string("msg");
+            $table->text('send_to')->comment("a quiene se le enviara, si le ponemos -1 es a todos");
+            $table->text("seen_by")->comment("listado de quienes ya vieron la notificación, visto por");
             $table->boolean('active')->default(true);
-            $table->rememberToken();
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('situations');
+        Schema::dropIfExists('notifactions');
     }
 };

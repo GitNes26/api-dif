@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Controller extends BaseController
 {
@@ -119,5 +120,26 @@ class Controller extends BaseController
             );
         }
         return $response;
+    }
+
+    public function notificationPush($msg, $icon)
+    {
+        return new StreamedResponse(function () {
+            // Datos que quieres enviar (pueden venir de la base de datos u otro servicio)
+            $data = new ObjResponse();
+            $data['alert_text'] = $msg;
+            $data['timestamp'] = now()->toDateTimeString();
+
+            // Envía un evento al cliente
+            echo "data: " . json_encode($data) . "\n\n";
+
+            // Forzar el envío del buffer
+            ob_flush();
+            flush();
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'Connection' => 'keep-alive',
+        ]);
     }
 }

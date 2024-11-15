@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,40 @@ use Illuminate\Validation\ValidationException;
 Route::get('/', function (Request $request) {
     return "API DIF :)";
 });
+
+
+// Route::get('/events/{message?}', function ($message = null) {
+//     return new StreamedResponse(function () use ($message) {
+//         while (true) {
+//             if ($message) {
+//                 // Si hay un mensaje, crea una notificación con él
+//                 $notification = [
+//                     'message' => $message,
+//                     'timestamp' => now()->toDateTimeString(),
+//                 ];
+//             } else {
+//                 // Si no hay mensaje, puedes enviar un evento vacío o una notificación predeterminada
+//                 $notification = [
+//                     // 'message' => 'Evento de prueba',
+//                     'timestamp' => now()->toDateTimeString(),
+//                 ];
+//             }
+
+//             // Enviar el evento SSE
+//             echo "data: " . json_encode($notification) . "\n\n";
+//             ob_flush();
+//             flush();
+
+//             // Pausa para simular un evento cada 2 segundos
+//             sleep(2);
+//         }
+//     }, 200, [
+//         'Content-Type' => 'text/event-stream',
+//         'Cache-Control' => 'no-cache',
+//         'Connection' => 'keep-alive',
+//     ]);
+// });
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
