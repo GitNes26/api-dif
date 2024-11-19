@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ObjResponse;
 use App\Models\PersonalInfo;
+use App\Models\VW_PersonalInfo;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +22,7 @@ class PersonalInfoController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = PersonalInfo::orderBy('id', 'desc');
+            $list = VW_PersonalInfo::orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
@@ -42,8 +44,8 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = PersonalInfo::where('active', true)
-                ->select('id as id', DB::raw("CONCAT(name,' ', plast_name,' ',mlast_name) as label"))
+            $list = VW_PersonalInfo::where('active', true)
+                ->select('id as id', 'full_name as label')
                 ->orderBy('name', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -109,7 +111,7 @@ class PersonalInfoController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $personal_info = PersonalInfo::find($id);
+            $personal_info = VW_PersonalInfo::find($id);
             if ($internal) return $personal_info;
 
             $response->data = ObjResponse::SuccessResponse();

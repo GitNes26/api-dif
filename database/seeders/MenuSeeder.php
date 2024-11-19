@@ -16,6 +16,7 @@ class MenuSeeder extends Seeder
         $menuTable = array("id" => 1, "path" => "/");
         $menuSettings = array("id" => 4, "path" => "configuraciones");
         $menuCatalogs = array("id" => 9, "path" => "catalogos");
+        $menuCiudadanos = array("id" => 16, "path" => "ciudadanos");
 
         // DASHBOARD
         $order = 0;
@@ -29,11 +30,11 @@ class MenuSeeder extends Seeder
         ]);
         $order += 1;
         DB::table('menus')->insert([ #2 Dashboard Administrativo
-            'menu' => 'Noticias',
+            'menu' => 'Tablero',
             'caption' => '',
             'type' => 'item',
             'belongs_to' => $menuTable["id"],
-            'url' => "/app/noticias",
+            'url' => "/app",
             'icon' => 'IconFileDollar',
             'order' => $order,
             'created_at' => now(),
@@ -44,7 +45,7 @@ class MenuSeeder extends Seeder
             'caption' => '',
             'type' => 'item',
             'belongs_to' => $menuTable["id"],
-            'url' => "/app",
+            'url' => "/app/noticias",
             'icon' => 'IconDashboard',
             'order' => $order,
             'created_at' => now(),
@@ -172,12 +173,33 @@ class MenuSeeder extends Seeder
             'order' => $order,
             'created_at' => now(),
         ]);
-        $order += 1;
-        DB::table('menus')->insert([ #16 Ciudadanos
+
+        // Ciudadanos
+        $order = 0;
+        DB::table('menus')->insert([ #16
             'menu' => 'Ciudadanos',
+            'caption' => 'Gestión de Ciudadanos',
+            'type' => 'group',
+            'belongs_to' => 0,
+            'order' => 4,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #17 Ciudadanos
+            'menu' => 'Listado',
             'type' => 'item',
-            'belongs_to' => $menuCatalogs["id"],
-            'url' => "/app/$menuCatalogs[path]/ciudadanos",
+            'belongs_to' => $menuCiudadanos["id"],
+            'url' => "/app/$menuCiudadanos[path]",
+            'icon' => 'IconBuildingSkyscraper',
+            'order' => $order,
+            'created_at' => now(),
+        ]);
+        $order += 1;
+        DB::table('menus')->insert([ #18 Ciudadanos
+            'menu' => 'Historial',
+            'type' => 'item',
+            'belongs_to' => $menuCiudadanos["id"],
+            'url' => "/app/$menuCiudadanos[path]/historial",
             'icon' => 'IconBuildingSkyscraper',
             'order' => $order,
             'created_at' => now(),

@@ -22,8 +22,9 @@ class Category extends Model
     protected $fillable = [
         'id',
         'category',
-        'description',
-        'process_flow',
+        'category_description',
+        'department_id',
+        // 'process_flow',
         'active',
     ];
 

@@ -33,6 +33,7 @@ class PersonalInfo extends Model
         'num_int',
         // 'img_ine',
         // 'img_photo',
+        'validity',
         'active',
     ];
 

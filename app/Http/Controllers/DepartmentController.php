@@ -7,6 +7,7 @@ use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
@@ -43,7 +44,7 @@ class DepartmentController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $list = Department::where('active', true)
-                ->select('id as id', 'department as label')
+                ->select('id as id', DB::raw("CONCAT(letters,' - ',department) as label"))
                 ->orderBy('department', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -69,7 +70,7 @@ class DepartmentController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->department, $id);
+            $duplicate = $this->validateAvailableData($request->letters, $request->department, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
@@ -198,9 +199,11 @@ class DepartmentController extends Controller
      * 
      * @return ObjRespnse|false
      */
-    private function validateAvailableData($department, $id)
+    private function validateAvailableData($letters, $department, $id)
     {
         // #VALIDACION DE DATOS REPETIDOS
+        $duplicate = $this->checkAvailableData('departments', 'letters', $letters, 'El nombre del departamento', 'letters', $id, null);
+        if ($duplicate["result"] == true) return $duplicate;
         $duplicate = $this->checkAvailableData('departments', 'department', $department, 'El nombre del departamento', 'department', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);

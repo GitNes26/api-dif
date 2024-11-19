@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\ObjResponse;
+use App\Models\VW_Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class CategoryController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = Category::orderBy('id', 'desc');
+            $list = VW_Category::orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
@@ -42,7 +43,7 @@ class CategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Category::where('active', true)
+            $list = VW_Category::where('active', true)
                 ->select('id as id', 'category as label')
                 ->orderBy('category', 'asc')->get();
 
@@ -102,7 +103,7 @@ class CategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $category = Category::find($id);
+            $category = VW_Category::find($id);
             if ($internal) return $category;
 
             $response->data = ObjResponse::SuccessResponse();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ObjResponse;
 use App\Models\Subcategory;
+use App\Models\VW_Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class SubcategoryController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = Subcategory::orderBy('id', 'desc');
+            $list = VW_Subcategory::orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
@@ -42,7 +43,7 @@ class SubcategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Subcategory::where('active', true)
+            $list = VW_Subcategory::where('active', true)
                 ->select('id as id', 'subcategory as label')
                 ->orderBy('subcategory', 'asc')->get();
 
@@ -102,7 +103,7 @@ class SubcategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $subcategory = Subcategory::find($id);
+            $subcategory = VW_Subcategory::find($id);
             if ($internal) return $subcategory;
 
             $response->data = ObjResponse::SuccessResponse();

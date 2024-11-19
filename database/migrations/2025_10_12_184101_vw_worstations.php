@@ -14,7 +14,7 @@ return new class extends Migration
     {
         DB::statement(
             "CREATE OR REPLACE VIEW vw_workstations AS 
-            SELECT w.*, d.department FROM workstations w INNER JOIN departments d ON w.department_id=d.id;"
+            SELECT w.*, d.letters, d.department, d.department_description FROM workstations w INNER JOIN departments d ON w.department_id=d.id;"
         );
     }
 

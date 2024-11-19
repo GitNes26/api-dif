@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,12 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('temporal_user_conn_sse', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId("user_id")->references("users");
-        //     $table->foreignId("conn")->references("users");
-        //     $table->timestamps();
-        // });
+        DB::statement(
+            "CREATE OR REPLACE VIEW vw_categories AS 
+            SELECT c.*, d.letters, d.department, d.department_description FROM categories c INNER JOIN departments d ON c.department_id=d.id;"
+        );
     }
 
     /**
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('temporal_user_conn_sse');
+        DB::statement('DROP VIEW IF EXISTS vw_categories');
     }
 };

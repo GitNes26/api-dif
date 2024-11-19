@@ -13,10 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(
-            "CREATE OR REPLACE VIEW vw_users AS 
-            SELECT u.*, r.role, r.read, r.create, r.update, r.delete, r.more_permissions, r.page_index 
-            FROM users u 
-            INNER JOIN roles r ON u.role_id=r.id;"
+            "CREATE OR REPLACE VIEW vw_personal_info AS 
+            SELECT pi.*, CONCAT(name,' ',plast_name,' ',mlast_name) as full_name, IF(gender='H', 'HOMBRE','MUJER') as gender --, CONCAT(street, ' #',num_ext, ' ') as address
+            FROM personal_info pi;"
         );
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('DROP VIEW IF EXISTS vw_users');
+        DB::statement('DROP VIEW IF EXISTS vw_personal_info');
     }
 };

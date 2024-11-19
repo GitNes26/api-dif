@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('notifactions', function (Blueprint $table) {
             $table->id();
             $table->string("msg");
-            $table->text('send_to')->comment("a quiene se le enviara, si le ponemos -1 es a todos");
+            $table->text('send_to')->comment("a quienes se le enviara, si le ponemos -1 es a todos");
             $table->text("seen_by")->comment("listado de quienes ya vieron la notificación, visto por");
             $table->boolean('active')->default(true);
             $table->timestamps();
