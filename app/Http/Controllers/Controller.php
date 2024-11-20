@@ -20,7 +20,7 @@ class Controller extends BaseController
      * @param String $dirPath
      * @param Number $id
      * @param String $PosFix
-     * @param Boolean $crate
+     * @param Boolean $create
      * @param String $nameFake
      * 
      * @return string
