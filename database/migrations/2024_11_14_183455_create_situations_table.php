@@ -20,7 +20,6 @@ return new class extends Migration
             $table->text("description")->nullable();
             $table->enum("status", ["abierta", "en_seguimiento", "cerrada"]);
             $table->boolean('active')->default(true);
-            $table->rememberToken();
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
         });

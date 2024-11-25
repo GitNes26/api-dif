@@ -8,6 +8,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SituationController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkstationController;
@@ -199,5 +200,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [PersonalInfoController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [PersonalInfoController::class, 'disEnable']);
         Route::get("/deleteMultiple", [PersonalInfoController::class, 'deleteMultiple']);
+    });
+
+    Route::prefix("sitations")->group(function () {
+        Route::get("/", [SituationController::class, 'index']);
+        Route::get("/selectIndex", [SituationController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [SituationController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [SituationController::class, 'show']);
+        Route::get("/delete/{id}", [SituationController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [SituationController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [SituationController::class, 'deleteMultiple']);
     });
 });

@@ -45,7 +45,7 @@ class PersonalInfoController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $list = VW_PersonalInfo::where('active', true)
-                ->select('id as id', 'full_name as label')
+                ->select('id as id', 'full_name as label', 'img_ine', 'img_photo')
                 ->orderBy('name', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
