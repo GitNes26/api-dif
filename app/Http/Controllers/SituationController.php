@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\ObjResponse;
 use App\Models\Situation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SituationController extends Controller
 {
@@ -73,23 +76,34 @@ class SituationController extends Controller
             //     $response->data = $duplicate;
             //     return response()->json($response);
             // }
+            $folio = $this->getLastFolio($request->letters);
+            // var_dump($folio);
+            $numFolio = 0;
+            if ($folio != 0) {
+                $parts = explode("-", $folio);
+                $numFolio = (int)end($parts);
+            }
+            $numFolio += 1;
+            $folio = sprintf("%s-%d", $request->letters, $numFolio);
 
             $situation = Situation::find($id);
             if (!$situation) {
                 $situation = new Situation();
-                $folio = $this->getLastFolio();
-                $numFolio = explode("-", "$folio")[-1];
             }
 
-            $situation->fill($request->all());
-            if ($folio) $situation->folio = $folio;
+            // $situation->fill($request->all());
+            $situation->folio = $folio;
+            $situation->personal_info_id = $request->personal_info_id;
+            $situation->subcategory_id = $request->subcategory_id;
+            $situation->registered_by = Auth::user()->id;
+            $situation->description = $request->description;
             $situation->save();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | situacion editada.' : 'peticion satisfactoria | situacion registrada.';
             $response->data["alert_text"] = $id > 0 ? "Situación editada" : "Situación registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el situacion ->" . $ex->getMessage());
+            error_log("Hubo un error al crear o actualizar la situacion ->" . $ex->getMessage());
             $response->data = ObjResponse::CatchResponse($ex->getMessage());
         }
         return response()->json($response, $response->data["status_code"]);
@@ -205,9 +219,9 @@ class SituationController extends Controller
     // private function validateAvailableData($full_name, $cellphone, $id)
     // {
     //     // #VALIDACION DE DATOS REPETIDOS
-    //     $duplicate = $this->checkAvailableData('situations', 'full_name', $full_name, 'El nombre del situacion', 'full_name', $id, null);
+    //     $duplicate = $this->checkAvailableData('situations', 'full_name', $full_name, 'El nombre dla situacion', 'full_name', $id, null);
     //     if ($duplicate["result"] == true) return $duplicate;
-    //     $duplicate = $this->checkAvailableData('situations', 'cellphone', $cellphone, 'El número celular del situacion', 'cellphone', $id, null);
+    //     $duplicate = $this->checkAvailableData('situations', 'cellphone', $cellphone, 'El número celular dla situacion', 'cellphone', $id, null);
     //     if ($duplicate["result"] == true) return $duplicate;
     //     return array("result" => false);
     // }
@@ -218,12 +232,13 @@ class SituationController extends Controller
      *
      * @return \Illuminate\Http\Int $folio
      */
-    private function getLastFolio()
+    private function getLastFolio(string $letters = null)
     {
         try {
             $folio = Situation::max('folio');
-            if ($folio == null) return 0;
-            return $folio;
+            if ($letters) $folio = Situation::where('folio', 'like', "$letters-%")->max('folio');
+
+            return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
             $msg =  "Error al obtener Ultimo Folio: " . $ex->getMessage();
             echo "$msg";

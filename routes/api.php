@@ -202,7 +202,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/deleteMultiple", [PersonalInfoController::class, 'deleteMultiple']);
     });
 
-    Route::prefix("sitations")->group(function () {
+    Route::prefix("situations")->group(function () {
         Route::get("/", [SituationController::class, 'index']);
         Route::get("/selectIndex", [SituationController::class, 'selectIndex']);
         Route::post("/createOrUpdate/{id?}", [SituationController::class, 'createOrUpdate']);
