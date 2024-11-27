@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement(
-            "CREATE OR REPLACE vw_situations AS
+            "CREATE OR REPLACE VIEW vw_situations AS
             SELECT s.*, 
             vwpi.id as pi_id, vwpi.name, vwpi.plast_name, vwpi.mlast_name, vwpi.gender,vwpi.email, vwpi.phone, vwpi.curp, vwpi.birthdate, vwpi.community_id, vwpi.street, vwpi.num_ext, vwpi.num_int, 
             vwpi.img_ine, vwpi.img_photo, vwpi.validity, vwpi.full_name, vwpi.full_gender, 
