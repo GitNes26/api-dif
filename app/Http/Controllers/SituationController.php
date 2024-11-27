@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\ObjResponse;
 use App\Models\Situation;
+use App\Models\VW_Situation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = Situation::orderBy('id', 'desc');
+            $list = VW_Situation::orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
@@ -44,7 +45,7 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $list = Situation::where('active', true)
+            $list = VW_Situation::where('active', true)
                 ->select('id as id', 'situation as label')
                 ->orderBy('situation', 'asc')->get();
 
@@ -120,7 +121,7 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $situation = Situation::find($id);
+            $situation = VW_Situation::find($id);
             if ($internal) return $situation;
 
             $response->data = ObjResponse::SuccessResponse();
