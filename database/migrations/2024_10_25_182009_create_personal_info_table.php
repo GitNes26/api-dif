@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('plast_name');
             $table->string('mlast_name');
             $table->enum('gender', ["H", "M"]);
-            $table->string('email');
-            $table->string('phone');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->string('curp');
             $table->date('birthdate');
             $table->integer('community_id');
