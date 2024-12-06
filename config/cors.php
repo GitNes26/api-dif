@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://sistema.dif.gomezpalacio.gob.mx'], # ['http://localhost:5173'], # ['*'],
+    'allowed_origins' => ['*'], # ['https://sistema.dif.gomezpalacio.gob.mx'], # ['http://localhost:5173'], # ['*'],
 
     'allowed_origins_patterns' => [],
 
