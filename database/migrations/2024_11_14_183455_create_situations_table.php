@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("folio")->unique()->comment("su estrucutura sera, letras del departamento, guion medio, numeracion por departamento, ej. PR-1");
             $table->foreignId('personal_info_id')->constrained('personal_info');
             $table->foreignId('subcategory_id')->constrained('subcategories');
-            $table->foreignId('registered_by')->constrained('employees')->comment("es el usuario del empleado que registra el caso en recepción.");
+            $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
             $table->text("description")->nullable();
             $table->enum("status", ["abierta", "en_seguimiento", "cerrada"]);
             $table->boolean('active')->default(true);
