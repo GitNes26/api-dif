@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class SubcategoryController extends Controller
 {
+    public function SPaffairsByDepartment(Response $response, $department_id){
+        // call sp_affairs_by_department(1);
+    }
+    
+    
+    
     /**
      * Mostrar lista de subcategorias.
      *
