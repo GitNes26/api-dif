@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\ObjResponse;
 use App\Models\Subcategory;
+use App\Models\VW_Employee;
 use App\Models\VW_Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,9 +19,11 @@ class SubcategoryController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
+            $employee = VW_Employee::where('user_id', $auth->id)->first();
             $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
             $list = $list->get();
-            if ($auth->role_id > 1) $list = DB::statement("call sp_affairs_by_department(?)", [$department_id]);
+            if ($auth->role_id > 2 && $employee) $list = DB::select("call sp_affairs_by_department(?)", [$employee->department_id]);
+            // var_dump($list);
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';
