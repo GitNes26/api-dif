@@ -8,15 +8,30 @@ use App\Models\VW_Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SubcategoryController extends Controller
 {
-    public function SPaffairsByDepartment(Response $response, $department_id){
-        // call sp_affairs_by_department(1);
+    public function SP_affairsByDepartment(Response $response, Int $department_id = null)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $auth = Auth::user();
+            $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
+            $list = $list->get();
+            if ($auth->role_id > 1) $list = DB::statement("call sp_affairs_by_department(?)", [$department_id]);
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';
+            $response->data["result"] = $list;
+        } catch (\Exception $ex) {
+            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+        }
+        return response()->json($response, $response->data["status_code"]);
     }
-    
-    
-    
+
+
+
     /**
      * Mostrar lista de subcategorias.
      *

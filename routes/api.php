@@ -116,6 +116,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [SubcategoryController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [SubcategoryController::class, 'disEnable']);
         Route::get("/deleteMultiple", [SubcategoryController::class, 'deleteMultiple']);
+
+        Route::get("/SP_affairsByDepartment/{department_id?}", [SubcategoryController::class, 'SP_affairsByDepartment']);
     });
 
     Route::prefix("departments")->group(function () {
