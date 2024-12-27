@@ -111,7 +111,8 @@ class RoleController extends Controller
 
             $role->save();
 
-            DB::table('personal_access_tokens')->where('abilities', $role->role)->delete();
+            // deleteTokenByAbility
+            DB::table('personal_access_tokens')->whereJsonContains('abilities', $role->role)->delete(); #Utilizar para cuando cambian permisos de un rol
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | permisos actualizado.';
