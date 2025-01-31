@@ -16,7 +16,7 @@ return new class extends Migration
             "CREATE OR REPLACE VIEW vw_situations AS
             SELECT s.*, 
             vwpi.id as pi_id, vwpi.name, vwpi.plast_name, vwpi.mlast_name, vwpi.gender,vwpi.email, vwpi.phone, vwpi.curp, vwpi.birthdate, vwpi.community_id, vwpi.street, vwpi.num_ext, vwpi.num_int, 
-            vwpi.img_ine, vwpi.img_photo, vwpi.validity, vwpi.full_name, vwpi.full_gender, 
+            vwpi.img_ine, vwpi.img_photo, vwpi.section, vwpi.validity, vwpi.full_name, vwpi.full_gender, 
             vwsc.id as sc_id, vwsc.subcategory, vwsc.subcategory_description, vwsc.category_id, vwsc.category, vwsc.category_description, vwsc.department_id, vwsc.letters, vwsc.department, vwsc.department_description,
             ur.username
             FROM situations s

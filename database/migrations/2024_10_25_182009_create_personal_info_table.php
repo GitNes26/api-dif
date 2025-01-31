@@ -30,6 +30,7 @@ return new class extends Migration
             // $table->string('voter_key');
             // $table->string('section');
             // $table->string('year_registration');
+            $table->string('section');
             $table->string('validity');
             $table->boolean('active')->default(true);
             $table->timestamps();
