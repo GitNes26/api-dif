@@ -117,18 +117,21 @@ class SituationController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
-    public function show(Request $request, Response $response, Int $id, bool $internal = false)
+    public function show(Request $request, Response $response, Int $id, String $folio, bool $internal = false)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $situation = VW_Situation::find($id);
+            $situation = isEmptyOrNullString($folio) ? VW_Situation::find($id) : VW_Situation::where($folio)->first();
             if ($internal) return $situation;
+            Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
             $response->data["result"] = $situation;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg =  "SitationController ~ show ~ Error al obtener el objeto: " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -241,8 +244,8 @@ class SituationController extends Controller
 
             return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
-            $msg =  "Error al obtener Ultimo Folio: " . $ex->getMessage();
-            echo "$msg";
+            $msg =  "SitationController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
+            Log::error($msg);
             return $msg;
         }
     }
