@@ -26,7 +26,7 @@ class Employee extends Model
         'office_phone',
         'ext',
         'workstation_id',
-        'user_id',
+        // 'user_id',
         'active'
     ];
 

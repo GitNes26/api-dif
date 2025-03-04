@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('img_ine')->nullable();
             $table->string('img_photo')->nullable();
             // $table->string('voter_key');
-            // $table->string('section');
             // $table->string('year_registration');
             $table->string('section');
             $table->string('validity');

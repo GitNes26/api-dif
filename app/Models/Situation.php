@@ -22,11 +22,24 @@ class Situation extends Model
     protected $fillable = [
         'id',
         'folio',
-        'personal_info_id',
+        'requester_id',
+        'beneficiary_id',
         'subcategory_id',
-        'registered_by',
         'description',
+        'support',
         'status',
+        // 'family_data', #esta tabla tendra el id de la situacion
+        'living_conditions_data_id',
+        // 'documents_data', #esta tabla tendra el id de la situacion
+        // 'evidences_data', #esta tabla tendra el id de la situacion
+        'registered_by',
+        'authorized_by',
+        'authorized_at',
+        'follow_up_by',
+        'follow_up_at',
+        'rejected_by',
+        'rejected_comment',
+        'rejected_at',
         'active',
     ];
 

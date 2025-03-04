@@ -14,11 +14,21 @@ return new class extends Migration
         Schema::create('situations', function (Blueprint $table) {
             $table->id();
             $table->string("folio")->unique()->comment("su estrucutura sera, letras del departamento, guion medio, numeracion por departamento, ej. PR-1");
-            $table->foreignId('personal_info_id')->constrained('personal_info');
+            $table->foreignId('requester_id')->constrained('personal_info');
+            $table->foreignId('beneficiary_id')->constrained('personal_info');
             $table->foreignId('subcategory_id')->constrained('subcategories');
-            $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
             $table->text("description")->nullable();
+            $table->text("support")->nullable();
             $table->enum("status", ["abierta", "en_seguimiento", "cerrada"]);
+            $table->foreignId('living_conditions_data_id')->constrained('living_conditions_data')->nullable();
+            $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
+            $table->integer('authorized_by')->nullable();
+            $table->dateTime('authorized_at')->nullable();
+            $table->integer('follow_up_by')->nullable();
+            $table->dateTime('follow_up_at')->nullable();
+            $table->integer('rejected_by')->nullable();
+            $table->text('rejected_comment')->nullable();
+            $table->dateTime('rejected_at')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();

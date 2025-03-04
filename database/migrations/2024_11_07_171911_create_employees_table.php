@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('office_phone')->nullable();
             $table->string('ext')->nullable()->comment('extension telefonica de su lugar en caso de tener');
             $table->foreignId('workstation_id')->constrained('workstations');
-            $table->foreignId('user_id')->constrained('users');
+            // $table->foreignId('user_id')->constrained('users');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
