@@ -20,7 +20,7 @@ return new class extends Migration
             vwsc.id as sc_id, vwsc.subcategory, vwsc.subcategory_description, vwsc.category_id, vwsc.category, vwsc.category_description, vwsc.department_id, vwsc.letters, vwsc.department, vwsc.department_description,
             ur.username
             FROM situations s
-            INNER JOIN vw_personal_info vwpi ON s.personal_info_id=vwpi.id
+            INNER JOIN vw_personal_info vwpi ON s.requester_id=vwpi.id
             INNER JOIN vw_subcategories vwsc ON s.subcategory_id=vwsc.id
             INNER JOIN users ur ON s.registered_by=ur.id
             "

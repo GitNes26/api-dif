@@ -94,7 +94,7 @@ class SituationController extends Controller
 
             // $situation->fill($request->all());
             $situation->folio = $folio;
-            $situation->personal_info_id = $request->personal_info_id;
+            $situation->requester_id = $request->requester_id;
             $situation->subcategory_id = $request->subcategory_id;
             $situation->registered_by = Auth::user()->id;
             $situation->description = $request->description;
