@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('documents_data', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('situation_id')->references('situations');
+            $table->string('name_doc');
+            $table->string('description_doc');
+            $table->string('img_doc', 255);
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 

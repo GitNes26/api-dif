@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('living_conditions_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('situtation_id')->references('situtations');
+            // $table->foreignId('situtation_id')->references('situtations');
             $table->string('house')->comment('propia|rentada|prestada|otro');
             $table->integer('rooms');
             $table->boolean('living');
@@ -26,7 +26,9 @@ return new class extends Migration
             $table->boolean('drainage_service')->comment('servicio de drenaje');
             $table->boolean('fosa_service')->comment('servicio de fosa');
             $table->boolean('fecalismo_service')->comment('servicio de fecalismo');
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 

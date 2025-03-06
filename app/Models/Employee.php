@@ -21,11 +21,15 @@ class Employee extends Model
      */
     protected $fillable = [
         'id',
+        'payrrol_number',
+        'avatar',
         'full_name',
         'cellphone',
         'office_phone',
         'ext',
-        'workstation_id',
+        'img_firm',
+        'position_id',
+        'department_id',
         // 'user_id',
         'active'
     ];
@@ -43,20 +47,36 @@ class Employee extends Model
     protected $primaryKey = 'id';
 
     /**
-     * Obtener puesto asociado con el empleado.
+     * Obtener departamento al que pertenece el empleado.
      */
-    public function workstation()
+    public function position()
     {   //primero se declara FK y despues la PK del modelo asociado
-        return $this->belongsTo(Workstation::class, 'workstation_id', 'id');
+        return $this->hasOne(Department::class, 'department_id', 'id');
     }
 
     /**
-     * Obtener usuario asociado con el empleado.
+     * Obtener departamento al que pertenece el empleado.
      */
-    public function user()
+    public function department()
     {   //primero se declara FK y despues la PK del modelo asociado
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->hasOne(Department::class, 'department_id', 'id');
     }
+
+    // /**
+    //  * Obtener puesto asociado con el empleado.
+    //  */
+    // public function workstation()
+    // {   //primero se declara FK y despues la PK del modelo asociado
+    //     return $this->belongsTo(Workstation::class, 'workstation_id', 'id');
+    // }
+
+    // /**
+    //  * Obtener usuario asociado con el empleado.
+    //  */
+    // public function user()
+    // {   //primero se declara FK y despues la PK del modelo asociado
+    //     return $this->belongsTo(User::class, 'user_id', 'id');
+    // }
 
     /**
      * Valores defualt para los campos especificados.

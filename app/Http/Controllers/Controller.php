@@ -16,30 +16,34 @@ class Controller extends BaseController
     /**
      * Funcion para guardar imagenes acorde al modelo.
      * @param Request $request
-     * @param File $requestFile
+     * @param File $requestFileName
      * @param String $dirPath
      * @param Number $id
-     * @param String $PosFix
+     * @param String $fileName
      * @param Boolean $create
-     * @param String $nameFake
+     * @param String $fakeName
      * 
      * @return string
      */
-    public function ImageUp($request, $requestFile, $dirPath, $id, $posFix, $create, $nameFake)
+    public function ImageUp($request, $requestFileName, $dirPath, $id, $fileName, $create, $fakeName, $model)
     {
         try {
             $dir = public_path($dirPath);
             $img_name = "";
-            if ($request->hasFile($requestFile)) {
+            if ($request->hasFile($requestFileName)) {
                 // return "ImageUp->aqui todo bien 3";
-                $img_file = $request->file($requestFile);
+                $img_file = $request->file($requestFileName);
                 $dir_path = "$dirPath/$id";
                 $destination = "$dir/$id";
-                $img_name = $this->ImgUpload($img_file, $destination, $dir_path, "$id-$posFix");
+                $img_name = $this->ImgUpload($img_file, $destination, $dir_path, "$id-$fileName");
             } else {
-                if ($create) $img_name = "$dirPath/$nameFake";
+                if ($create) $img_name = "$dirPath/$fakeName";
             }
-            return $img_name;
+            if ($request->hasFile($requestFileName)) {
+                $model->$requestFileName = $img_name;
+                $model->save();
+            }
+            // return $img_name;
         } catch (\Exception $ex) {
             $msg =  "Error al cargar imagen de documentos data: " . $ex->getMessage();
             error_log("$msg");

@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            // $table->bigInteger('id', true)->primary();
+        Schema::create('economic_data', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('email');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->foreignId('role_id')->constrained('roles');
-            $table->foreignId('employee_id')->constrained('employees')->nullable();
+            $table->decimal('monthly_income')->default(0)->comment('Ingresos mensuales');
+            $table->decimal('monthly_expenses')->default(0)->comment('Egresos mensuales');
             $table->boolean('active')->default(true);
-            $table->rememberToken();
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('economic_data');
     }
 };

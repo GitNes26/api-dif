@@ -13,11 +13,18 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('cellphone');
+            $table->integer('payroll_number')->nullable();
+            $table->string('avatar', 255)->nullable();
+            $table->string('name');
+            $table->string('plast_name');
+            $table->string('mlast_name');
+            $table->string('cellphone')->nullable();
             $table->string('office_phone')->nullable();
             $table->string('ext')->nullable()->comment('extension telefonica de su lugar en caso de tener');
-            $table->foreignId('workstation_id')->constrained('workstations');
+            $table->string('img_firm', 255)->nullable();
+            $table->foreignId('position_id')->constrained('positions')->comment('Puesto de trabajo');
+            $table->foreignId('department_id')->constrained('departments');
+            // $table->foreignId('workstation_id')->constrained('workstations');
             // $table->foreignId('user_id')->constrained('users');
             $table->boolean('active')->default(true);
             $table->timestamps();

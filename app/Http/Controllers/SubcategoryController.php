@@ -11,19 +11,24 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SubcategoryController extends Controller
 {
-    public function SP_affairsByDepartment(Response $response, Int $department_id = null)
+    public function SP_affairsByDepartment(Int $department_id = null, Response $response,)
     {
+        Log::info('SP_affairsByDepartment ~ department_id: ' . $department_id);
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
             $employee = VW_Employee::where('user_id', $auth->id)->first();
+            Log::info('SP_affairsByDepartment ~ employee: ' . $employee);
+
             $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
             $list = $list->get();
             if ($auth->role_id > 2 && $employee) $list = DB::select("call sp_affairs_by_department(?)", [$employee->department_id]);
             // var_dump($list);
+            Log::info('SP_affairsByDepartment ~ list: ' . $list);
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';

@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('evidences_data', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('situation_id')->references('situations', 'id');
+            $table->string('name_evidence');
+            $table->string('description_evidence');
+            $table->string('img_evidence', 255);
+            $table->boolean('active')->default(true);
             $table->timestamps();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 

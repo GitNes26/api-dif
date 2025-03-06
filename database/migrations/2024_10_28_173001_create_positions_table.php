@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workstations', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('workstation');
-            // $table->text('description')->nullable();
-            $table->foreignId('department_id')->constrained('departments');
+            $table->string('position');
+            $table->text('description')->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workstations');
+        Schema::dropIfExists('positions');
     }
 };

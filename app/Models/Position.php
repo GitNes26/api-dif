@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Workstation extends Model
+class Position extends Model
 {
     use HasFactory;
 
@@ -21,8 +21,7 @@ class Workstation extends Model
      */
     protected $fillable = [
         'id',
-        'workstation',
-        'department_id',
+        'position',
         'active'
     ];
 
@@ -30,7 +29,7 @@ class Workstation extends Model
      * Nombre de la tabla asociada al modelo.
      * @var string
      */
-    protected $table = 'workstations';
+    protected $table = 'positions';
 
     /**
      * LlavePrimaria asociada a la tabla.
@@ -38,13 +37,6 @@ class Workstation extends Model
      */
     protected $primaryKey = 'id';
 
-    /**
-     * Obtener departamento asociado con el puesto.
-     */
-    public function department()
-    {   //primero se declara FK y despues la PK del modelo asociado
-        return $this->belongsTo(Department::class, 'department_id', 'id');
-    }
 
     /**
      * Valores defualt para los campos especificados.
