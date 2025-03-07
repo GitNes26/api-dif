@@ -19,10 +19,11 @@ return new class extends Migration
             $table->foreignId('subcategory_id')->constrained('subcategories');
             $table->text("description")->nullable();
             $table->text("support")->nullable();
-            $table->enum("status", ["abierta", "en_seguimiento", "cerrada"]);
-            $table->foreignId('living_conditions_data_id')->constrained('living_conditions_data')->nullable();
-            $table->foreignId('economic_data_id')->constrained('economic_data')->nullable();
+            $table->enum("status", ["abierto", "en_seguimiento", "cerrado", "cancelado"]);
+            // $table->foreignId('living_conditions_data_id')->constrained('living_conditions_data')->nullable();
+            // $table->foreignId('economic_data_id')->constrained('economic_data')->nullable();
             $table->string('img_firm_requester')->nullable();
+            $table->integer('situation_settings_id')->nullable();
             $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
             $table->integer('authorized_by')->nullable();
             $table->dateTime('authorized_at')->nullable();

@@ -17,10 +17,10 @@ return new class extends Migration
             SELECT e.*, 
             CONCAT(e.name,' ',e.plast_name,' ',e.mlast_name) as full_name, 
             CONCAT(e.plast_name,' ',e.mlast_name,' ',e.name) as full_name_reverse, 
-            p.position, p.description, d.letters, d.department, p.department_description
+            p.position, p.description, d.letters, d.department, d.department_description
             FROM employees e
             INNER JOIN positions p ON e.position_id=p.id
-            INNER JOIN department d ON e.department_id=d.id;"
+            INNER JOIN departments d ON e.department_id=d.id;"
         );
     }
 

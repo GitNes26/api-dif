@@ -7,6 +7,7 @@ use App\Models\ObjResponse;
 use App\Models\Subcategory;
 use App\Models\VW_Employee;
 use App\Models\VW_Subcategory;
+use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,12 @@ class SubcategoryController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $employee = VW_Employee::where('user_id', $auth->id)->first();
-            Log::info('SP_affairsByDepartment ~ employee: ' . $employee);
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+            Log::info('SP_affairsByDepartment ~ userEmployee: ' . $userEmployee);
 
             $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
             $list = $list->get();
-            if ($auth->role_id > 2 && $employee) $list = DB::select("call sp_affairs_by_department(?)", [$employee->department_id]);
+            if ($auth->role_id > 2 && $userEmployee) $list = DB::select("call sp_affairs_by_department(?)", [$userEmployee->department_id]);
             // var_dump($list);
             Log::info('SP_affairsByDepartment ~ list: ' . $list);
 

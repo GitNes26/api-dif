@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('family_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('situation_id')->references('situations');
+            $table->foreignId('situation_id')->constrained('situations');
             $table->string('full_name', 150);
             $table->integer('age');
             $table->string('relationship', 100)->comment('Relacion que tiene el recidente con el solicitante');

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('living_conditions_data', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('situtation_id')->references('situtations');
+            $table->foreignId('situtation_id')->constrained('situations');
             $table->string('house')->comment('propia|rentada|prestada|otro');
+            $table->foreignId('situation_id')->constrained('situations');
             $table->integer('rooms');
             $table->boolean('living');
             $table->boolean('dining')->comment('comedor');

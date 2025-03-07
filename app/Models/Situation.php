@@ -29,9 +29,13 @@ class Situation extends Model
         'support',
         'status',
         // 'family_data', #esta tabla tendra el id de la situacion
-        'living_conditions_data_id',
+        // 'living_conditions_data_id',
+        // 'economic_data_id'
         // 'documents_data', #esta tabla tendra el id de la situacion
         // 'evidences_data', #esta tabla tendra el id de la situacion
+        'img_firm_requester',
+        'situation_settings_id',
+        
         'registered_by',
         'authorized_by',
         'authorized_at',

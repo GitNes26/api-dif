@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('plast_name');
             $table->string('mlast_name');
             $table->enum('gender', ["H", "M"]);
+            $table->foreignId('civil_status_id')->constrained('civil_statuses')->nullable();
+            $table->boolean('is_working')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('curp');

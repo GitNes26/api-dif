@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('economic_data', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('situation_id')->constrained('situations');
             $table->decimal('monthly_income')->default(0)->comment('Ingresos mensuales');
             $table->decimal('monthly_expenses')->default(0)->comment('Egresos mensuales');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
-            $table->timestamps();
         });
     }
 

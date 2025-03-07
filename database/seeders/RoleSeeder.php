@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     {
         DB::table('roles')->insert([
             [
-                'role' => 'SuperAdmin',
+                'role' => 'SuperAdmin', #1
                 'description' => 'Rol dedicado para la completa configuracion del sistema desde el area de desarrollo.',
                 'read' => 'todas',
                 'create' => 'todas',
@@ -26,7 +26,7 @@ class RoleSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'role' => 'Administrador',
+                'role' => 'Administrador', #2
                 'description' => 'Rol dedicado para usuarios que gestionaran el sistema.',
                 'read' => 'todas',
                 'create' => 'todas',
@@ -37,7 +37,40 @@ class RoleSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'role' => 'Ciudadano',
+                'role' => 'Director', #3
+                'description' => 'Rol dedicado para el director del DIF.',
+                'read' => '',
+                'create' => '',
+                'update' => '',
+                'delete' => '',
+                'more_permissions' => '',
+                'page_index' => '/app',
+                'created_at' => now(),
+            ],
+            [
+                'role' => 'Encargado', #4
+                'description' => 'Rol dedicado para personal encargado del departamento.',
+                'read' => '',
+                'create' => '',
+                'update' => '',
+                'delete' => '',
+                'more_permissions' => '',
+                'page_index' => '/app',
+                'created_at' => now(),
+            ],
+            [
+                'role' => 'Recepcionista', #5
+                'description' => 'Rol dedicado para personal encargado del departamento.',
+                'read' => '',
+                'create' => '',
+                'update' => '',
+                'delete' => '',
+                'more_permissions' => '',
+                'page_index' => '/app',
+                'created_at' => now(),
+            ],
+            [
+                'role' => 'Ciudadano', #6
                 'description' => 'Rol dedicado para el ciudadano.',
                 'read' => '',
                 'create' => '',

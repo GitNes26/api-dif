@@ -13,8 +13,8 @@ return new class extends Migration
     {
         // Schema::create('temporal_user_conn_sse', function (Blueprint $table) {
         //     $table->id();
-        //     $table->foreignId("user_id")->references("users");
-        //     $table->foreignId("conn")->references("users");
+        //     $table->foreignId("user_id")->constrained("users");
+        //     $table->foreignId("conn")->constrained("users");
         //     $table->timestamps();
         // });
     }

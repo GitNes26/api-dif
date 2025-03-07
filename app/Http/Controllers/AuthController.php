@@ -99,7 +99,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
-                'role_id' => 3,  //usuario normal - Ciudadano
+                'role_id' => 6,  //usuario normal - Ciudadano
             ]);
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | usuario registrado.';

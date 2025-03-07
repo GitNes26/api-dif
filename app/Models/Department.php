@@ -24,6 +24,7 @@ class Department extends Model
         'letters',
         'department',
         'department_description',
+        'img_sello',
         'active',
     ];
 

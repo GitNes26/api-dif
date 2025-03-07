@@ -76,6 +76,7 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            $userAuth = Auth::user();
             // $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
             // if ($duplicate["result"] == true) {
             //     $response->data = $duplicate;
@@ -100,7 +101,7 @@ class SituationController extends Controller
             $situation->folio = $folio;
             $situation->requester_id = $request->requester_id;
             $situation->subcategory_id = $request->subcategory_id;
-            $situation->registered_by = Auth::user()->id;
+            $situation->registered_by = $id > 0 && $userAuth->id;
             $situation->description = $request->description;
             $situation->save();
 
@@ -115,6 +116,8 @@ class SituationController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
+    public function followUp(Request $request, Response $response, Int $id, String $folio) {}
+
     /**
      * Mostrar situacion.
      *
@@ -126,7 +129,7 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $situation = isEmptyOrNullString($folio) ? VW_Situation::find($id) : VW_Situation::where($folio)->first();
+            $situation = isEmptyOrNullString($folio) ? VW_Situation::find($id) : VW_Situation::where('folio', $folio)->first();
             if ($internal) return $situation;
             Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documents_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('situation_id')->references('situations');
+            $table->foreignId('situation_id')->constrained('situations');
             $table->string('name_doc');
             $table->string('description_doc');
             $table->string('img_doc', 255);

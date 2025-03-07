@@ -84,8 +84,10 @@ class DepartmentController extends Controller
             $department = Department::find($id);
             if (!$department) $department = new Department();
 
-            $department->fill($request->all());
+            $department->fill($request->except(['img_sello']));
             $department->save();
+
+            $this->ImageUp($request, 'img_sello', "departments", $id, 'Sello', $id == null ? true : false, "noImage.png", $department);
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | departamento editada.' : 'peticion satisfactoria | departamento registrada.';

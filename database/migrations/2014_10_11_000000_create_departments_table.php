@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('letters')->nullable()->comment("letras que hagan referencia al departamento");
             $table->string('department');
             $table->text('department_description')->nullable();
+            $table->string('img_sello', 255)->nullable();
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();
