@@ -7,6 +7,7 @@ use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MenuController extends Controller
 {
@@ -34,7 +35,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus por rol.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ getMenusByRole ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -53,7 +56,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $menu;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ getIdByUrl ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -74,7 +79,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ getHeadersMenusSelect ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -101,7 +108,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ selectIndexToRoles ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -124,7 +133,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -145,7 +156,9 @@ class MenuController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -189,8 +202,9 @@ class MenuController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | menu editado.' : 'peticion satisfactoria | menu registrado.';
             $response->data["alert_text"] = $id > 0 ? "Menú editado" : "Menú registrado";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el menu ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -219,7 +233,9 @@ class MenuController extends Controller
             $response->data["message"] = 'peticion satisfactoria | menu encontrado.';
             $response->data["result"] = $menu;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -245,7 +261,9 @@ class MenuController extends Controller
             $response->data["message"] = "peticion satisfactoria | menu $description.";
             $response->data["alert_text"] = "Menú $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "MenuController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

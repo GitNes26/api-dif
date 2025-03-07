@@ -8,6 +8,7 @@ use App\Models\VW_Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -86,8 +87,9 @@ class CategoryController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | categoria editada.' : 'peticion satisfactoria | categoria registrada.';
             $response->data["alert_text"] = $id > 0 ? "Categoria editada" : "Categoria registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el categoria ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "Hubo un error al crear o actualizar el categoria ->" . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

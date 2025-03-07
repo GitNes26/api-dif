@@ -16,7 +16,9 @@ return new class extends Migration
             "CREATE OR REPLACE VIEW vw_users AS 
             SELECT u.*, r.role, r.read, r.create, r.update, r.delete, r.more_permissions, r.page_index 
             FROM users u 
-            INNER JOIN roles r ON u.role_id=r.id;"
+            INNER JOIN roles r ON u.role_id=r.id
+            LEFT JOIN vw_employees e ON u.employee_id=e.id
+            ;"
         );
     }
 

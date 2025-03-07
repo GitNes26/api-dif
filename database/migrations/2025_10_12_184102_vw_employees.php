@@ -14,10 +14,13 @@ return new class extends Migration
     {
         DB::statement(
             "CREATE OR REPLACE VIEW vw_employees AS 
-            SELECT e.*, vwu.username, vwu.email, vwu.role_id, vwu.role, vwu.read, vwu.create, vwu.update, vwu.delete, vwu.more_permissions, vwu.page_index, vww.workstation, vww.department_id, vww.letters, vww.department, vww.department_description 
+            SELECT e.*, 
+            CONCAT(e.name,' ',e.plast_name,' ',e.mlast_name) as full_name, 
+            CONCAT(e.plast_name,' ',e.mlast_name,' ',e.name) as full_name_reverse, 
+            p.position, p.description, d.letters, d.department, p.department_description
             FROM employees e
-            INNER JOIN vw_users vwu ON e.user_id=vwu.id
-            INNER JOIN vw_workstations vww ON e.workstation_id=vww.id;"
+            INNER JOIN positions p ON e.position_id=p.id
+            INNER JOIN department d ON e.department_id=d.id;"
         );
     }
 

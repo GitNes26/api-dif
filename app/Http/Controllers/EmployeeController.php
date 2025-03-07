@@ -8,6 +8,8 @@ use App\Models\VW_Employee;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -29,7 +31,9 @@ class EmployeeController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de empleados.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -44,8 +48,8 @@ class EmployeeController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $list = VW_Employee::where('active', true)
-                ->select('id as id', 'employee as label')
-                ->orderBy('employee', 'asc')->get();
+                ->select('id as id', DB::raw("CONCAT(payroll_number,' - ',full_name) as label"))
+                ->orderBy('full_name', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | lista de empleados.';
@@ -53,7 +57,9 @@ class EmployeeController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -70,7 +76,7 @@ class EmployeeController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
+            $duplicate = $this->validateAvailableData($request->payroll_number, $request->cellphone, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
@@ -79,15 +85,20 @@ class EmployeeController extends Controller
             $employee = Employee::find($id);
             if (!$employee) $employee = new Employee();
 
-            $employee->fill($request->all());
+            $employee->fill($request->except(['avatar', 'img_firm']));
             $employee->save();
+
+            $this->ImageUp($request, 'avatar', "employees", $id, 'AVATAR', $id == null ? true : false, "noImage.png", $employee);
+            $this->ImageUp($request, 'img_firm', "employees", $id, 'FIRMA', $id == null ? true : false, "noImage.png", $employee);
+
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | empleado editado.' : 'peticion satisfactoria | empleado registrado.';
             $response->data["alert_text"] = $id > 0 ? "Empleado editado" : "Empleado registrado";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el empleado ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -110,7 +121,9 @@ class EmployeeController extends Controller
             $response->data["message"] = 'peticion satisfactoria | empleado encontrado.';
             $response->data["result"] = $employee;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -136,7 +149,9 @@ class EmployeeController extends Controller
             $response->data["message"] = "peticion satisfactoria | empleado eliminado.";
             $response->data["alert_text"] = "Empleado eliminado";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -162,7 +177,9 @@ class EmployeeController extends Controller
             $response->data["message"] = "peticion satisfactoria | empleado $description.";
             $response->data["alert_text"] = "Empleado $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -188,7 +205,9 @@ class EmployeeController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminado' : "Registros eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "EmployeeController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -199,10 +218,10 @@ class EmployeeController extends Controller
      * 
      * @return ObjRespnse|false
      */
-    private function validateAvailableData($full_name, $cellphone, $id)
+    private function validateAvailableData($payroll_number, $cellphone, $id)
     {
         // #VALIDACION DE DATOS REPETIDOS
-        $duplicate = $this->checkAvailableData('employees', 'full_name', $full_name, 'El nombre del empleado', 'full_name', $id, null);
+        $duplicate = $this->checkAvailableData('employees', 'payroll_number', $payroll_number, 'El numero de nómina', 'payroll_number', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         $duplicate = $this->checkAvailableData('employees', 'cellphone', $cellphone, 'El número celular del empleado', 'cellphone', $id, null);
         if ($duplicate["result"] == true) return $duplicate;

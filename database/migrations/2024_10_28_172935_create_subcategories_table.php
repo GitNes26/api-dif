@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('subcategory');
             $table->text('subcategory_description')->nullable();
-            $table->foreignId('category_id')->constrained('categories');
             $table->boolean('active')->default(true);
             $table->timestamps();
             $table->dateTime('deleted_at')->nullable();

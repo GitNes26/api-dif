@@ -23,7 +23,9 @@ class Employee extends Model
         'id',
         'payrrol_number',
         'avatar',
-        'full_name',
+        'name',
+        'plast_name',
+        'mlast_name',
         'cellphone',
         'office_phone',
         'ext',
@@ -51,7 +53,7 @@ class Employee extends Model
      */
     public function position()
     {   //primero se declara FK y despues la PK del modelo asociado
-        return $this->hasOne(Department::class, 'department_id', 'id');
+        return $this->hasOne(Position::class, 'position_id', 'id');
     }
 
     /**

@@ -11,7 +11,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SituationController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WorkstationController;
+use App\Http\Controllers\PositionController;
 use App\Models\Menu;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
@@ -130,14 +130,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/deleteMultiple", [DepartmentController::class, 'deleteMultiple']);
     });
 
-    Route::prefix("workstations")->group(function () {
-        Route::get("/", [WorkstationController::class, 'index']);
-        Route::get("/selectIndex", [WorkstationController::class, 'selectIndex']);
-        Route::post("/createOrUpdate/{id?}", [WorkstationController::class, 'createOrUpdate']);
-        Route::get("/id/{id}", [WorkstationController::class, 'show']);
-        Route::get("/delete/{id}", [WorkstationController::class, 'delete']);
-        Route::get("/disEnable/{id}/{active}", [WorkstationController::class, 'disEnable']);
-        Route::get("/deleteMultiple", [WorkstationController::class, 'deleteMultiple']);
+    Route::prefix("positions")->group(function () {
+        Route::get("/", [PositionController::class, 'index']);
+        Route::get("/selectIndex", [PositionController::class, 'selectIndex']);
+        Route::post("/createOrUpdate/{id?}", [PositionController::class, 'createOrUpdate']);
+        Route::get("/id/{id}", [PositionController::class, 'show']);
+        Route::get("/delete/{id}", [PositionController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [PositionController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [PositionController::class, 'deleteMultiple']);
     });
 
     Route::prefix("employees")->group(function () {

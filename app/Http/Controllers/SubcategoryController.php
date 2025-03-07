@@ -34,7 +34,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ SP_affairsByDepartment ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -59,7 +61,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -83,7 +87,9 @@ class SubcategoryController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -116,8 +122,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | subcategoria editada.' : 'peticion satisfactoria | subcategoria registrada.';
             $response->data["alert_text"] = $id > 0 ? "Subcategoria editada" : "Subcategoria registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el subcategoria ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -140,7 +147,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = 'peticion satisfactoria | subcategoria encontrada.';
             $response->data["result"] = $subcategory;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -166,7 +175,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = "peticion satisfactoria | subcategoria eliminada.";
             $response->data["alert_text"] = "Subcategoria eliminada";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -192,7 +203,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = "peticion satisfactoria | subcategoria $description.";
             $response->data["alert_text"] = "Subcategoria $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -218,7 +231,9 @@ class SubcategoryController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminado' : "Registros eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SubcategoryController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

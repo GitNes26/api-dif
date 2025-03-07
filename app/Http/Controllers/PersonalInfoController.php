@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PersonalInfoController extends Controller
 {
@@ -30,7 +31,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de informacion personal.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -54,7 +57,9 @@ class PersonalInfoController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -91,8 +96,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | informacion personal editada.' : 'peticion satisfactoria | informacion personal registrada.';
             $response->data["alert_text"] = $id > 0 ? "Información Personal editada" : "Información Personal registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el informacion personal ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -115,7 +121,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = 'peticion satisfactoria | informacion personal encontrado.';
             $response->data["result"] = $personal_info;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -141,7 +149,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = "peticion satisfactoria | informacion personal eliminada.";
             $response->data["alert_text"] = "Información Personal eliminada";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -167,7 +177,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = "peticion satisfactoria | informacion personal $description.";
             $response->data["alert_text"] = "Información Personal $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -193,7 +205,9 @@ class PersonalInfoController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminada' : "Registros eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "PersonalInfoController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

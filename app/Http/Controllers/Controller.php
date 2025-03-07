@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Controller extends BaseController
@@ -45,8 +46,8 @@ class Controller extends BaseController
             }
             // return $img_name;
         } catch (\Exception $ex) {
-            $msg =  "Error al cargar imagen de documentos data: " . $ex->getMessage();
-            error_log("$msg");
+            $msg =  "Controller ~ Error al cargar imagen de documentos data: " . $ex->getMessage();
+            Log::error("$msg");
             return "$msg";
         }
     }
@@ -83,8 +84,8 @@ class Controller extends BaseController
             $image->move($destination, $imgName);
             return "$dir/$imgName";
         } catch (\Error $err) {
-            $msg = "error en imgUpload(): " . $err->getMessage();
-            error_log($msg);
+            $msg = "Controller ~ error en imgUpload(): " . $err->getMessage();
+            Log::error($msg);
             return "$msg";
         }
     }

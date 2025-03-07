@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -25,8 +26,9 @@ class UserController extends Controller
         try {
             $roleAuth = Auth::user()->role_id;
             $list = VW_User::where("role_id", ">=", $roleAuth)
-                ->orderBy('id', 'desc')
-                ->get();
+                ->orderBy('id', 'desc');
+            if ($auroleAuth > 1) $list = $list->where("active", true);
+            $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de usuarios.';
@@ -34,7 +36,9 @@ class UserController extends Controller
 
             // Http::get(route('api.notifications'));
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -63,7 +67,9 @@ class UserController extends Controller
             $response->data["alert_text"] = "usuarios encontrados";
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ selectIndexByRole ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -87,7 +93,9 @@ class UserController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -104,7 +112,7 @@ class UserController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $duplicate = $this->validateAvailableData($request->username, $request->email, $id);
+            $duplicate = $this->validateAvailableData($request->username, $request->email, $request->employee_id, $id);
             if ($duplicate["result"] == true) {
                 $response->data = $duplicate;
                 return response()->json($response);
@@ -112,7 +120,7 @@ class UserController extends Controller
 
             $user = User::find($id);
             if (!$user) $user = new User();
-            $user->fill($request->only(['email', 'username', 'password', 'role_id']));
+            $user->fill($request->only(['email', 'username', 'password', 'role_id', 'employee_id']));
             if ((bool)$request->changePassword && strlen($request->password) > 0) $user->password = Hash::make($request->password);
             $user->save();
 
@@ -122,8 +130,9 @@ class UserController extends Controller
 
             // $this->notificationPush($response->data["alert_text"],$response->data["alert_icon"]);
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el usuario ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -149,7 +158,9 @@ class UserController extends Controller
             $response->data["message"] = 'peticion satisfactoria | usuario encontrado.';
             $response->data["result"] = $user;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -175,7 +186,9 @@ class UserController extends Controller
             $response->data["message"] = "peticion satisfactoria | usuario eliminado.";
             $response->data["alert_text"] = "Usuario eliminado";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -201,7 +214,9 @@ class UserController extends Controller
             $response->data["message"] = "peticion satisfactoria | user $description.";
             $response->data["alert_text"] = "Usuario $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -227,7 +242,9 @@ class UserController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | usuario eliminado.' : "peticion satisfactoria | usuarios eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Usuario eliminado' : "Usuarios eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "UserController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -238,12 +255,14 @@ class UserController extends Controller
      * 
      * @return ObjRespnse|false
      */
-    private function validateAvailableData($username, $email, $id)
+    private function validateAvailableData($username, $email, $employee_id, $id)
     {
         // #VALIDACION DE DATOS REPETIDOS
         $duplicate = $this->checkAvailableData('users', 'username', $username, 'El nombre de usuario', 'username', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         $duplicate = $this->checkAvailableData('users', 'email', $email, 'El correo electrónico', 'email', $id, null);
+        if ($duplicate["result"] == true) return $duplicate;
+        $duplicate = $this->checkAvailableData('users', 'employee_id', $employee_id, 'El empleado ya fue asignado,', 'employee_id', $id, null);
         if ($duplicate["result"] == true) return $duplicate;
         return array("result" => false);
     }

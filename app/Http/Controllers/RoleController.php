@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
@@ -29,7 +30,9 @@ class RoleController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de roles.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -54,7 +57,9 @@ class RoleController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -86,8 +91,9 @@ class RoleController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | rol editado.' : 'peticion satisfactoria | rol registrado.';
             $response->data["alert_text"] = $id > 0 ? "Rol editado" : "Rol registrado";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el rol ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -118,7 +124,9 @@ class RoleController extends Controller
             $response->data["message"] = 'peticion satisfactoria | permisos actualizado.';
             $response->data["alert_text"] = 'Permisos actualizados';
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ updatePermissions ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -144,7 +152,9 @@ class RoleController extends Controller
             $response->data["message"] = 'peticion satisfactoria | rol encontrado.';
             $response->data["result"] = $rol;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ show ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -170,7 +180,9 @@ class RoleController extends Controller
             $response->data["message"] = "peticion satisfactoria | rol eliminado.";
             $response->data["alert_text"] = "Rol eliminado";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -196,7 +208,9 @@ class RoleController extends Controller
             $response->data["message"] = "peticion satisfactoria | rol $description.";
             $response->data["alert_text"] = "Rol $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -222,7 +236,9 @@ class RoleController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | rol eliminado.' : "peticion satisfactoria | roles eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Rol eliminado' : "Roles eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "RoleController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

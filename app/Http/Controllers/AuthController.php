@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -71,7 +72,9 @@ class AuthController extends Controller
             $response->data["message"] = 'peticion satisfactoria | sesión cerrada.';
             $response->data["alert_title"] = "Bye!";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "Authontroller ~ logout ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -102,7 +105,9 @@ class AuthController extends Controller
             $response->data["message"] = 'peticion satisfactoria | usuario registrado.';
             $response->data["alert_text"] = "REGISTRO EXITOSO! <br>Bienvenido $request->username!";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "Authontroller ~ signup ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -136,7 +141,9 @@ class AuthController extends Controller
             $response->data["message"] = 'peticion satisfactoria | contraseña actualizada.';
             $response->data["alert_text"] = "Contraseña actualizada - todas tus sesiones se cerraran para aplicar cambios.";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "Authontroller ~ changePasswordAuth ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

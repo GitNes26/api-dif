@@ -31,7 +31,9 @@ class SituationController extends Controller
             $response->data["message"] = 'Peticion satisfactoria | Lista de situaciones.';
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ index ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -55,7 +57,9 @@ class SituationController extends Controller
             $response->data["result"] = $list;
             $response->data["toast"] = false;
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ selectIndex ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -104,8 +108,9 @@ class SituationController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | situacion editada.' : 'peticion satisfactoria | situacion registrada.';
             $response->data["alert_text"] = $id > 0 ? "Situación editada" : "Situación registrada";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar la situacion ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -129,7 +134,7 @@ class SituationController extends Controller
             $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
             $response->data["result"] = $situation;
         } catch (\Exception $ex) {
-            $msg =  "SitationController ~ show ~ Error al obtener el objeto: " . $ex->getMessage();
+            $msg = "SituationController ~ show ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }
@@ -157,7 +162,9 @@ class SituationController extends Controller
             $response->data["message"] = "peticion satisfactoria | situacion eliminada.";
             $response->data["alert_text"] = "Situación eliminada";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ delete ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -183,7 +190,9 @@ class SituationController extends Controller
             $response->data["message"] = "peticion satisfactoria | situacion $description.";
             $response->data["alert_text"] = "Situación $description";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }
@@ -209,7 +218,9 @@ class SituationController extends Controller
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminado' : "Registros eliminados  ($countDeleted)";
         } catch (\Exception $ex) {
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "SituationController ~ deleteMultiple ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

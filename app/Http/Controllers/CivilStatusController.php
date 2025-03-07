@@ -7,6 +7,7 @@ use App\Models\ObjResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CivilStatusController extends Controller
 {
@@ -85,8 +86,9 @@ class CivilStatusController extends Controller
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | estado civil editado.' : 'peticion satisfactoria | estado civil registrado.';
             $response->data["alert_text"] = $id > 0 ? "Estado civil editado" : "Estado civil registrado";
         } catch (\Exception $ex) {
-            error_log("Hubo un error al crear o actualizar el estado civil ->" . $ex->getMessage());
-            $response->data = ObjResponse::CatchResponse($ex->getMessage());
+            $msg = "Hubo un error al crear o actualizar el estado civil ->" . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
         }
         return response()->json($response, $response->data["status_code"]);
     }

@@ -57,6 +57,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Obtener empleado asociado con el user.
+     */
+    public function employee()
+    {   //primero se declara FK y despues la PK del modelo asociado
+        return $this->belongsTo(VW_Employee::class, 'employee_id', 'id');
+    }
+
+    /**
      * Valores defualt para los campos especificados.
      * @var array
      */
