@@ -16,20 +16,19 @@ use Illuminate\Support\Facades\Log;
 
 class SubcategoryController extends Controller
 {
-    public function SP_affairsByDepartment(Int $department_id = null, Response $response,)
+    public function SP_affairsByDepartment(Request $request, Response $response, Int $department_id = null)
     {
-        Log::info('SP_affairsByDepartment ~ department_id: ' . $department_id);
+        // Log::info('SP_affairsByDepartment ~ department_id: ' . $department_id);
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
             $userEmployee = VW_User::where('id', $auth->id)->first();
-            Log::info('SP_affairsByDepartment ~ userEmployee: ' . $userEmployee);
+            // Log::info('SP_affairsByDepartment ~ userEmployee: ' . $userEmployee);
 
             $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
             $list = $list->get();
             if ($auth->role_id > 2 && $userEmployee) $list = DB::select("call sp_affairs_by_department(?)", [$userEmployee->department_id]);
-            // var_dump($list);
-            Log::info('SP_affairsByDepartment ~ list: ' . $list);
+            // Log::info('SP_affairsByDepartment ~ list: ' . $list);
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de subcategorias.';

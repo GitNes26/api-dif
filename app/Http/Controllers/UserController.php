@@ -27,7 +27,7 @@ class UserController extends Controller
             $roleAuth = Auth::user()->role_id;
             $list = VW_User::where("role_id", ">=", $roleAuth)
                 ->orderBy('id', 'desc');
-            if ($auroleAuth > 1) $list = $list->where("active", true);
+            if ($roleAuth > 1) $list = $list->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();

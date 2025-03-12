@@ -40,6 +40,7 @@ class Controller extends BaseController
             } else {
                 if ($create) $img_name = "$dirPath/$fakeName";
             }
+            Log::info("Controller ~ ImageUp ~ img_name: " . $img_name);
             if ($request->hasFile($requestFileName)) {
                 $model->$requestFileName = $img_name;
                 $model->save();

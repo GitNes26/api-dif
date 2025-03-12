@@ -47,7 +47,7 @@ class DepartmentController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $list = Department::where('active', true)
-                ->select('id as id', DB::raw("CONCAT(letters,' - ',department) as label"))
+                ->select('id as id', DB::raw("CONCAT(COALESCE(letters, ''),' - ',department) as label"))
                 ->orderBy('department', 'asc')->get();
 
             $response->data = ObjResponse::SuccessResponse();
