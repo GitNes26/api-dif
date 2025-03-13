@@ -23,6 +23,8 @@ class PersonalInfo extends Model
         'plast_name',
         'mlast_name',
         'gender',
+        'civil_status_id',
+        'is_working',
         'email',
         'phone',
         'curp',
