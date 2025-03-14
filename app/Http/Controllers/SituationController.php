@@ -125,11 +125,11 @@ class SituationController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
-    public function show(Request $request, Response $response, Int $id, String $folio, bool $internal = false)
+    public function show(Request $request, Response $response, String $column, String $value, bool $internal = false)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $situation = isEmptyOrNullString($folio) ? VW_Situation::find($id) : VW_Situation::where('folio', $folio)->first();
+            $situation = VW_Situation::where($column, $value)->first();
             if ($internal) return $situation;
             Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
 
