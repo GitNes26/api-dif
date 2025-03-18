@@ -118,75 +118,9 @@ class SituationController extends Controller
 
     public function followUp(Request $request, Response $response, Int $id)
     {
-        $response                                                                                                            ->data = ObjResponse::DefaultResponse();
+        $response->data = ObjResponse::DefaultResponse();
         try {
-            $u
-            }
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            serAuth = Auth::user();
+            $userAuth = Auth::user();
             // $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
             // if ($duplicate["result"] == true) {
             //     $response->data = $duplicate;
@@ -199,7 +133,6 @@ class SituationController extends Controller
             $situation->fill($request->all());
             // $situation->folio = $folio;
             // $situation->requester_id = $request->requester_id;
-
             $situation->save();
             Log::info("situacion editada: " . $situation);
 
@@ -315,7 +248,7 @@ class SituationController extends Controller
     /**
      * Eliminar uno o varios registros.
      *
-     * @param  \Illuminate\Http\Re                                 quest $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
     public function deleteMultiple(Request $request, Response $response)
