@@ -174,6 +174,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/", [SituationController::class, 'index']);
         Route::get("/selectIndex", [SituationController::class, 'selectIndex']);
         Route::post("/createOrUpdate/{id?}", [SituationController::class, 'createOrUpdate']);
+        Route::post("/followUp/{id}", [SituationController::class, 'followUp']);
         Route::get("/{column}/{value}", [SituationController::class, 'show']);
         // Route::get("/id/{id}", [SituationController::class, 'show']);
         // Route::get("/folio/{folio}", [SituationController::class, 'show']);

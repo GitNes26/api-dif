@@ -116,7 +116,104 @@ class SituationController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
-    public function followUp(Request $request, Response $response, Int $id, String $folio) {}
+    public function followUp(Request $request, Response $response, Int $id)
+    {
+        $response                                                                                                            ->data = ObjResponse::DefaultResponse();
+        try {
+            $u
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            serAuth = Auth::user();
+            // $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
+            // if ($duplicate["result"] == true) {
+            //     $response->data = $duplicate;
+            //     return response()->json($response);
+            // }
+
+            $situation = Situation::find($id);
+            Log::info("situacion: " . $situation);
+
+            $situation->fill($request->all());
+            // $situation->folio = $folio;
+            // $situation->requester_id = $request->requester_id;
+
+            $situation->save();
+            Log::info("situacion editada: " . $situation);
+
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'situacion editada.';
+            $response->data["alert_text"] = "Sección completada";
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
 
     /**
      * Mostrar situacion.
@@ -129,9 +226,24 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $situation = VW_Situation::where($column, $value)->first();
+            $Situation = Situation::where($column, $value)->first();
+            // Log::info("SitationController ~ show ~ Situation" . json_encode($Situation));
+            $situation = $Situation::with([
+                'requester',
+                'beneficiary',
+                'subcategory',
+                // 'situationSetting',
+                'register',
+                'authorizer',
+                'followUper',
+                'rejecter',
+                'familyData',
+                'documentsData',
+                'evidencesData'
+            ])->findOrFail($Situation->id);
+
             if ($internal) return $situation;
-            Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
+            // Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
@@ -203,7 +315,7 @@ class SituationController extends Controller
     /**
      * Eliminar uno o varios registros.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Re                                 quest $request
      * @return \Illuminate\Http\Response $response
      */
     public function deleteMultiple(Request $request, Response $response)

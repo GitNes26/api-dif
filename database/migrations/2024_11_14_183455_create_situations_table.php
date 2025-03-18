@@ -20,9 +20,17 @@ return new class extends Migration
             $table->text("description")->nullable();
             $table->text("support")->nullable();
             $table->enum("status", ["abierto", "en_seguimiento", "cerrado", "cancelado"]);
-            // $table->foreignId('living_conditions_data_id')->constrained('living_conditions_data')->nullable();
-            // $table->foreignId('economic_data_id')->constrained('economic_data')->nullable();
+            $table->boolean('family_data_finish')->nullable();
+            $table->boolean('living_conditions_data_finish')->nullable();
+            $table->boolean('economic_data_finish')->nullable();
+            $table->boolean('documents_data_finish')->nullable();
+            $table->boolean('evidences_data_finish')->nullable();
+            $table->boolean('finish')->nullable();
             $table->string('img_firm_requester')->nullable();
+
+            $table->integer('current_page')->default(1)->nullable();
+            $table->dateTime('end_date')->nullable();
+
             $table->integer('situation_settings_id')->nullable();
             $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
             $table->integer('authorized_by')->nullable();

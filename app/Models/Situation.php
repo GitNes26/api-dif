@@ -22,26 +22,35 @@ class Situation extends Model
     protected $fillable = [
         'id',
         'folio',
-        'requester_id',
-        'beneficiary_id',
-        'subcategory_id',
+        'requester_id', #tabla personal_info
+        'beneficiary_id', #tabla personal_info
+        'subcategory_id', #tabla subcategories
         'description',
         'support',
         'status',
         // 'family_data', #esta tabla tendra el id de la situacion
+        'family_data_finish',
         // 'living_conditions_data_id',
+        'living_conditions_data_finish',
         // 'economic_data_id'
+        'economic_data_finish',
         // 'documents_data', #esta tabla tendra el id de la situacion
+        'documents_data_finish',
         // 'evidences_data', #esta tabla tendra el id de la situacion
+        'evidences_data_finish',
+        'finish',
         'img_firm_requester',
-        'situation_settings_id',
-        
-        'registered_by',
-        'authorized_by',
+        'situation_settings_id', #tabla sutuation_settings
+
+        'current_page',
+        'end_date',
+
+        'registered_by', #tabla users
+        'authorized_by', #tabla users
         'authorized_at',
-        'follow_up_by',
+        'follow_up_by', #tabla users
         'follow_up_at',
-        'rejected_by',
+        'rejected_by', #tabla users 
         'rejected_comment',
         'rejected_at',
         'active',
@@ -59,13 +68,69 @@ class Situation extends Model
      */
     protected $primaryKey = 'id';
 
-    /**
-     * Obtener los usuarios relacionados a un rol.
-     */
-    // public function users()
-    // {
-    //     return $this->hasMany(User::class, 'role_id', 'id'); //primero se declara FK y despues la PK
-    // }
+    // Relación con la tabla personal_info (Solicitante)
+    public function requester()
+    {
+        return $this->belongsTo(VW_PersonalInfo::class, 'requester_id');
+    }
+
+    // Relación con la tabla personal_info (Beneficiario)
+    public function beneficiary()
+    {
+        return $this->belongsTo(VW_PersonalInfo::class, 'beneficiary_id');
+    }
+
+    // Relación con la tabla subcategories
+    public function subcategory()
+    {
+        return $this->belongsTo(VW_Subcategory::class, 'subcategory_id');
+    }
+
+    // Relación con la tabla situation_settings
+    public function situationSetting()
+    {
+        return $this->belongsTo(VW_SituationSetting::class, 'situation_settings_id');
+    }
+
+    // Relación con la tabla users (Usuario que registró)
+    public function register()
+    {
+        return $this->belongsTo(VW_User::class, 'registered_by');
+    }
+
+    // Relación con la tabla users (Usuario que autorizó)
+    public function authorizer()
+    {
+        return $this->belongsTo(VW_User::class, 'authorized_by');
+    }
+
+    // Relación con la tabla users (Usuario que da seguimiento)
+    public function followUper()
+    {
+        return $this->belongsTo(VW_User::class, 'follow_up_by');
+    }
+
+    // Relación con la tabla users (Usuario que rechazó)
+    public function rejecter()
+    {
+        return $this->belongsTo(VW_User::class, 'rejected_by');
+    }
+
+    // Relaciones con otras tablas con el ID de `situacion`
+    public function familyData()
+    {
+        return $this->hasMany(FamilyData::class, 'situation_id');
+    }
+
+    public function documentsData()
+    {
+        return $this->hasMany(DocumentData::class, 'situation_id');
+    }
+
+    public function evidencesData()
+    {
+        return $this->hasMany(EvidenceData::class, 'situation_id');
+    }
 
     /**
      * Valores defualt para los campos especificados.
