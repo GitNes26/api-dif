@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('breakfast_nook')->comment('antecomedor');
             $table->boolean('bedroom')->comment('recamara');
             $table->string('house_material')->comment('adobe|ladrillo|concreto|otro');
+            $table->string('stove')->comment('gas|petroleo|leña|otro');
             $table->boolean('water_service')->comment('servicio de agua');
             $table->boolean('electricity_service')->comment('servicio de electicidad');
             $table->boolean('drainage_service')->comment('servicio de drenaje');

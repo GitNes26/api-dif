@@ -23,6 +23,7 @@ class LivingConditionsData extends Model
         'breakfast_nook',
         'bedroom',
         'house_material',
+        'stove',
         'water_service',
         'electricity_service',
         'drainage_service',

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CivilStatusController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FamilyDataController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
@@ -181,5 +182,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [SituationController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [SituationController::class, 'disEnable']);
         Route::get("/deleteMultiple", [SituationController::class, 'deleteMultiple']);
+    });
+    Route::prefix("familyData")->group(function () {
+        Route::get("/", [FamilyDataController::class, 'index']);
+        Route::get("/indexByFolio/{folio}", [FamilyDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [FamilyDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [FamilyDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [FamilyDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [FamilyDataController::class, 'deleteMultiple']);
     });
 });
