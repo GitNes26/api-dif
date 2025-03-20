@@ -122,6 +122,16 @@ class Situation extends Model
         return $this->hasMany(FamilyData::class, 'situation_id');
     }
 
+    public function livingData()
+    {
+        return $this->hasOne(LivingConditionsData::class, 'situation_id');
+    }
+
+    public function economicData()
+    {
+        return $this->hasOne(EconomicData::class, 'situation_id');
+    }
+
     public function documentsData()
     {
         return $this->hasMany(DocumentData::class, 'situation_id');

@@ -23,7 +23,22 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = VW_Situation::orderBy('id', 'desc');
+            // $list = VW_Situation::orderBy('id', 'desc');
+            $list = Situation::with([
+                'requester',
+                'beneficiary',
+                'subcategory',
+                // 'situationSetting',
+                'register',
+                'authorizer',
+                'followUper',
+                'rejecter',
+                'familyData',
+                'livingData',
+                'economicData',
+                'documentsData',
+                'evidencesData'
+            ])->orderBy('id', 'desc');
             if ($auth->role_id > 1) $list = $list->where("active", true);
             $list = $list->get();
 
@@ -171,6 +186,8 @@ class SituationController extends Controller
                 'followUper',
                 'rejecter',
                 'familyData',
+                'livingData',
+                'economicData',
                 'documentsData',
                 'evidencesData'
             ])->findOrFail($Situation->id);

@@ -4,8 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CivilStatusController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EconomicDataController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FamilyDataController;
+use App\Http\Controllers\LivingConditionsDataController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PersonalInfoController;
 use App\Http\Controllers\RoleController;
@@ -190,5 +192,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [FamilyDataController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [FamilyDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [FamilyDataController::class, 'deleteMultiple']);
+    });
+    Route::prefix("livingData")->group(function () {
+        Route::get("/", [LivingConditionsDataController::class, 'index']);
+        Route::get("/indexByFolio/{folio}", [LivingConditionsDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [LivingConditionsDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [LivingConditionsDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [LivingConditionsDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [LivingConditionsDataController::class, 'deleteMultiple']);
+    });
+    Route::prefix("economicData")->group(function () {
+        Route::get("/", [EconomicDataController::class, 'index']);
+        Route::get("/indexByFolio/{folio}", [EconomicDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [EconomicDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [EconomicDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [EconomicDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [EconomicDataController::class, 'deleteMultiple']);
     });
 });
