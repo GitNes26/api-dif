@@ -76,6 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/createOrUpdate/{id?}", [MenuController::class, 'createOrUpdate']);
         Route::get("/id/{id}", [MenuController::class, 'show']);
         Route::get("/disEnable/{id}/{active}", [MenuController::class, 'disEnable']);
+
+        Route::post("/getIdByUrl", [MenuController::class, 'getIdByUrl']);
     });
 
     Route::prefix("roles")->group(function () {

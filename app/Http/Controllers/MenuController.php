@@ -47,11 +47,11 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response $response
      */
-    public function getIdByUrl(Response $response, String $url)
+    public function getIdByUrl(Request $request, Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $menu = Menu::where('url', $url)->where('active', 1)->select("id")->first();
+            $menu = Menu::where('url', $request->url)->where('active', 1)->select("id")->first();
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de menus.';
             $response->data["result"] = $menu;
