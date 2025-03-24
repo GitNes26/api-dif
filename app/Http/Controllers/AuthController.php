@@ -27,6 +27,9 @@ class AuthController extends Controller
         if ($request->email) {
             $field = 'email';
             $value = $request->email;
+        } elseif ($request->payroll_number) {
+            $field = 'payroll_number';
+            $value = $request->payroll_number;
         }
 
         $request->validate([
