@@ -26,7 +26,6 @@ class SituationController extends Controller
             // $list = VW_Situation::orderBy('id', 'desc');
             $list = Situation::with([
                 'requester',
-                'beneficiary',
                 'subcategory',
                 // 'situationSetting',
                 'register',

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("folio")->unique()->comment("su estrucutura sera, letras del departamento, guion medio, numeracion por departamento, ej. PR-1");
             $table->foreignId('requester_id')->constrained('personal_info');
-            $table->foreignId('beneficiary_id')->constrained('personal_info')->nullable();
+            $table->string('beneficiary', 255)->nullable();
+            $table->integer('beneficiary_age')->nullable();
             $table->foreignId('subcategory_id')->constrained('subcategories');
             $table->text("description")->nullable();
             $table->text("support")->nullable();

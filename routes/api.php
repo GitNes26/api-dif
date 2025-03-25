@@ -211,4 +211,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/disEnable/{id}/{active}", [EconomicDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [EconomicDataController::class, 'deleteMultiple']);
     });
+    Route::prefix("docData")->group(function () {
+        Route::get("/", [EconomicDataController::class, 'index']);
+        Route::get("/indexByFolio/{folio}", [EconomicDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [EconomicDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [EconomicDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [EconomicDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [EconomicDataController::class, 'deleteMultiple']);
+    });
 });

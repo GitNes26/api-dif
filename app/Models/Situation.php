@@ -23,7 +23,8 @@ class Situation extends Model
         'id',
         'folio',
         'requester_id', #tabla personal_info
-        'beneficiary_id', #tabla personal_info
+        'beneficiary',
+        'beneficiary_age',
         'subcategory_id', #tabla subcategories
         'description',
         'support',
@@ -72,12 +73,6 @@ class Situation extends Model
     public function requester()
     {
         return $this->belongsTo(VW_PersonalInfo::class, 'requester_id');
-    }
-
-    // Relación con la tabla personal_info (Beneficiario)
-    public function beneficiary()
-    {
-        return $this->belongsTo(VW_PersonalInfo::class, 'beneficiary_id');
     }
 
     // Relación con la tabla subcategories
