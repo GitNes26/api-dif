@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\DocumentData;
+use App\Models\ObjResponse;
+use App\Models\Situation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DocumentDataController extends Controller
 {
@@ -113,12 +118,12 @@ class DocumentDataController extends Controller
             $documentData->save();
             // $date = new Date();
 
-            $this->ImageUp($request, 'img_doc', "situations/$request->situation_id", $request->situation_id, "$request->name_doc", $id == null ? true : false, "noImage.png", $documentData);
+            $this->ImageUp($request, 'img_doc', "situations/$request->folio", null, "$request->name_doc", $id == null ? true : false, "noImage.png", $documentData);
 
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | documento editado.' : 'peticion satisfactoria | documento registrado.';
-            $response->data["alert_text"] = $id > 0 ? "Familiar editado" : "Familiar registrado";
+            $response->data["alert_text"] = $id > 0 ? "Documento editado" : "Documento registrado";
         } catch (\Exception $ex) {
             $msg = "DocumentDataController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -174,7 +179,7 @@ class DocumentDataController extends Controller
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | documento eliminada.";
-            $response->data["alert_text"] = "Familiar eliminada";
+            $response->data["alert_text"] = "Documento eliminada";
         } catch (\Exception $ex) {
             $msg = "DocumentDataController ~ delete ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -202,7 +207,7 @@ class DocumentDataController extends Controller
             $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | documento $description.";
-            $response->data["alert_text"] = "Familiar $description";
+            $response->data["alert_text"] = "Documento $description";
         } catch (\Exception $ex) {
             $msg = "DocumentDataController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);

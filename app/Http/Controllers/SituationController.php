@@ -177,7 +177,6 @@ class SituationController extends Controller
             // Log::info("SitationController ~ show ~ Situation" . json_encode($Situation));
             $situation = $Situation::with([
                 'requester',
-                'beneficiary',
                 'subcategory',
                 // 'situationSetting',
                 'register',

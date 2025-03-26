@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CivilStatusController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DocumentDataController;
 use App\Http\Controllers\EconomicDataController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FamilyDataController;
@@ -211,12 +212,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/disEnable/{id}/{active}", [EconomicDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [EconomicDataController::class, 'deleteMultiple']);
     });
-    Route::prefix("docData")->group(function () {
-        Route::get("/", [EconomicDataController::class, 'index']);
-        Route::get("/indexByFolio/{folio}", [EconomicDataController::class, 'indexByFolio']);
-        Route::post("/createOrUpdate/{id?}", [EconomicDataController::class, 'createOrUpdate']);
-        Route::get("/delete/{id}", [EconomicDataController::class, 'delete']);
-        Route::get("/disEnable/{id}/{active}", [EconomicDataController::class, 'disEnable']);
-        Route::get("/deleteMultiple", [EconomicDataController::class, 'deleteMultiple']);
+    Route::prefix("documentData")->group(function () {
+        Route::get("/", [DocumentDataController::class, 'index']);
+        Route::get("/indexByFolio/{folio}", [DocumentDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [DocumentDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [DocumentDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [DocumentDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [DocumentDataController::class, 'deleteMultiple']);
     });
 });
