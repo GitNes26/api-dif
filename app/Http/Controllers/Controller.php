@@ -28,20 +28,19 @@ class Controller extends BaseController
      */
     public function ImageUp($request, $requestFileName, $dirPath, $id, $fileName, $create, $fakeName, $model)
     {
-        $date = new date("YMdhhmmss");
+        // $date = date('Y-m-d H:i:s');
         try {
             $dir = public_path($dirPath);
             $img_name = "";
             if ($request->hasFile($requestFileName)) {
-                // return "ImageUp->aqui todo bien 3";
                 $img_file = $request->file($requestFileName);
                 $dir_path = is_null($id) ? "$dirPath" : "$dirPath/$id";
                 $destination = is_null($id) ? "$dir" : "$dir/$id";
-                $img_name = $this->ImgUpload($img_file, $destination, $dir_path, is_null($id) ? "$fileName-$date" : "$id-$fileName");
+                $img_name = $this->ImgUpload($img_file, $destination, $dir_path, is_null($id) ? "$fileName" : "$id-$fileName");
             } else {
                 if ($create) $img_name = "$dirPath/$fakeName";
             }
-            Log::info("Controller ~ ImageUp ~ img_name: " . $img_name);
+            // Log::info("Controller ~ ImageUp ~ img_name: " . $img_name);
             if ($request->hasFile($requestFileName)) {
                 $model->$requestFileName = $img_name;
                 $model->save();

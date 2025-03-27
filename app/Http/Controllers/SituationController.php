@@ -142,13 +142,13 @@ class SituationController extends Controller
             // }
 
             $situation = Situation::find($id);
-            Log::info("situacion: " . $situation);
+            // Log::info("situacion: " . $situation);
 
             $situation->fill($request->all());
             // $situation->folio = $folio;
             // $situation->requester_id = $request->requester_id;
             $situation->save();
-            Log::info("situacion editada: " . $situation);
+            // Log::info("situacion editada: " . $situation);
 
 
             $response->data = ObjResponse::SuccessResponse();
@@ -288,23 +288,6 @@ class SituationController extends Controller
         return response()->json($response, $response->data["status_code"]);
     }
 
-
-    // /**
-    //  * Funcion para validar que campos no deben de duplicarse sus valores.
-    //  * 
-    //  * @return ObjRespnse|false
-    //  */
-    // private function validateAvailableData($full_name, $cellphone, $id)
-    // {
-    //     // #VALIDACION DE DATOS REPETIDOS
-    //     $duplicate = $this->checkAvailableData('situations', 'full_name', $full_name, 'El nombre dla situacion', 'full_name', $id, null);
-    //     if ($duplicate["result"] == true) return $duplicate;
-    //     $duplicate = $this->checkAvailableData('situations', 'cellphone', $cellphone, 'El número celular dla situacion', 'cellphone', $id, null);
-    //     if ($duplicate["result"] == true) return $duplicate;
-    //     return array("result" => false);
-    // }
-
-
     /**
      * Obtener el ultimo folio.
      *
@@ -322,5 +305,25 @@ class SituationController extends Controller
             Log::error($msg);
             return $msg;
         }
+    }
+
+    public function saveFirmRequester(Request $request, Response $response, Int $id)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $situation = Situation::find($id);
+            // Log::info("situacion: " . $situation);
+            $this->ImageUp($request, 'img_firm_requester', "situations/$request->folio", null, "FirmaSolicitante", $request->id == null ? true : false, "noImage.png", $situation);
+            // Log::info("situacion editada: " . $situation);
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'firma cargada.';
+            $response->data["alert_text"] = "Firma Cargada";
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ saveFirmRequester ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
     }
 }

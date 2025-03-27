@@ -98,7 +98,7 @@ class DocumentDataController extends Controller
      * 
      * @return \Illuminate\Http\Response $response
      */
-    public function createOrUpdate(Request $request, Response $response, Int $id = null)
+    public function createOrUpdate(Request $request, Response $response)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
@@ -109,7 +109,7 @@ class DocumentDataController extends Controller
             //     return response()->json($response);
             // }
 
-            $documentData = DocumentData::find($id);
+            $documentData = DocumentData::find($request->id);
             if (!$documentData) {
                 $documentData = new DocumentData();
             }
@@ -118,12 +118,12 @@ class DocumentDataController extends Controller
             $documentData->save();
             // $date = new Date();
 
-            $this->ImageUp($request, 'img_doc', "situations/$request->folio", null, "$request->name_doc", $id == null ? true : false, "noImage.png", $documentData);
+            $this->ImageUp($request, 'img_doc', "situations/$request->folio", null, "$request->name_doc", $request->id == null ? true : false, "noImage.png", $documentData);
 
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | documento editado.' : 'peticion satisfactoria | documento registrado.';
-            $response->data["alert_text"] = $id > 0 ? "Documento editado" : "Documento registrado";
+            $response->data["message"] = $request->id > 0 ? 'peticion satisfactoria | documento editado.' : 'peticion satisfactoria | documento registrado.';
+            $response->data["alert_text"] = $request->id > 0 ? "Documento editado" : "Documento registrado";
         } catch (\Exception $ex) {
             $msg = "DocumentDataController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -139,11 +139,11 @@ class DocumentDataController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response $response
      */
-    public function show(Request $request, Response $response, String $column, String $value, bool $internal = false)
+    public function show(Request $request, Response $response, Int $id, bool $internal = false)
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $documentData = DocumentData::where($column, $value)->first();
+            $documentData = DocumentData::find($id);
             // Log::info("SitationController ~ show ~ documentData" . json_encode($documentData));
 
             if ($internal) return $documentData;

@@ -182,6 +182,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/createOrUpdate/{id?}", [SituationController::class, 'createOrUpdate']);
         Route::post("/followUp/{id}", [SituationController::class, 'followUp']);
         Route::get("/{column}/{value}", [SituationController::class, 'show']);
+        Route::post("/{id}/saveFirmRequester", [SituationController::class, 'saveFirmRequester']);
+
         // Route::get("/id/{id}", [SituationController::class, 'show']);
         // Route::get("/folio/{folio}", [SituationController::class, 'show']);
         Route::get("/delete/{id}", [SituationController::class, 'delete']);
@@ -214,8 +216,10 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix("documentData")->group(function () {
         Route::get("/", [DocumentDataController::class, 'index']);
+        Route::get("/id/{id}", [DocumentDataController::class, 'show']);
         Route::get("/indexByFolio/{folio}", [DocumentDataController::class, 'indexByFolio']);
-        Route::post("/createOrUpdate/{id?}", [DocumentDataController::class, 'createOrUpdate']);
+        Route::post("/createOrUpdate/{id}/folio/{folio}", [DocumentDataController::class, 'createOrUpdate']);
+        Route::post("/createOrUpdate/folio/{folio}", [DocumentDataController::class, 'createOrUpdate']);
         Route::get("/delete/{id}", [DocumentDataController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [DocumentDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [DocumentDataController::class, 'deleteMultiple']);
