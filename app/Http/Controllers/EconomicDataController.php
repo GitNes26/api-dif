@@ -23,7 +23,7 @@ class EconomicDataController extends Controller
         try {
             $auth = Auth::user();
             $list = EconomicData::orderBy('id', 'desc');
-            if ($auth->role_id > 1) $list = $list->where("active", true);
+            if ($auth->role_id > 2) $list = $list->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -91,7 +91,7 @@ class EconomicDataController extends Controller
     }
 
     /**
-     * Crear o Actualizar informacion de vivienda.
+     * Crear o Actualizar informacion de economica.
      *
      * @param \Illuminate\Http\Request $request
      * @param Int $id
@@ -118,8 +118,8 @@ class EconomicDataController extends Controller
             $economicData->save();
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | informacion de vivienda editado.' : 'peticion satisfactoria | informacion de vivienda registrado.';
-            $response->data["alert_text"] = $id > 0 ? "Familiar editado" : "Familiar registrado";
+            $response->data["message"] = $id > 0 ? 'peticion satisfactoria | informacion de economica editado.' : 'peticion satisfactoria | informacion de economica registrado.';
+            $response->data["alert_text"] = $id > 0 ? "Datos Economicos editado" : "Datos Economicos registrado";
         } catch (\Exception $ex) {
             $msg = "EconomicDataController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -129,7 +129,7 @@ class EconomicDataController extends Controller
     }
 
     /**
-     * Mostrar informacion de vivienda.
+     * Mostrar informacion de economica.
      *
      * @param   int $id
      * @param  \Illuminate\Http\Request $request
@@ -159,7 +159,7 @@ class EconomicDataController extends Controller
             // Log::info("SitationController ~ show ~ situtation" . json_encode($economicData));
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | informacion de vivienda encontrada.';
+            $response->data["message"] = 'peticion satisfactoria | informacion de economica encontrada.';
             $response->data["result"] = $economicData;
         } catch (\Exception $ex) {
             $msg = "EconomicDataController ~ show ~ Hubo un error -> " . $ex->getMessage();
@@ -170,7 +170,7 @@ class EconomicDataController extends Controller
     }
 
     /**
-     * "Eliminar" (cambiar estado activo=0) informacion de vivienda.
+     * "Eliminar" (cambiar estado activo=0) informacion de economica.
      *
      * @param  int $id
      * @param  int $active
@@ -187,8 +187,8 @@ class EconomicDataController extends Controller
                 ]);
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | informacion de vivienda eliminada.";
-            $response->data["alert_text"] = "Familiar eliminada";
+            $response->data["message"] = "peticion satisfactoria | informacion de economica eliminada.";
+            $response->data["alert_text"] = "Datos Economicos eliminada";
         } catch (\Exception $ex) {
             $msg = "EconomicDataController ~ delete ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -215,8 +215,8 @@ class EconomicDataController extends Controller
 
             $description = $active == "0" ? 'desactivado' : 'reactivado';
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = "peticion satisfactoria | informacion de vivienda $description.";
-            $response->data["alert_text"] = "Familiar $description";
+            $response->data["message"] = "peticion satisfactoria | informacion de economica $description.";
+            $response->data["alert_text"] = "Datos Economicos $description";
         } catch (\Exception $ex) {
             $msg = "EconomicDataController ~ disEnable ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);

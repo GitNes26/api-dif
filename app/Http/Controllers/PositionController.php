@@ -22,7 +22,7 @@ class PositionController extends Controller
         try {
             $auth = Auth::user();
             $list = Position::orderBy('id', 'desc');
-            if ($auth->role_id > 1) $list = $list->where("active", true);
+            if ($auth->role_id > 2) $list = $list->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();

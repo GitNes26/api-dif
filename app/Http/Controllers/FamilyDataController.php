@@ -23,7 +23,7 @@ class FamilyDataController extends Controller
         try {
             $auth = Auth::user();
             $list = FamilyData::orderBy('id', 'desc');
-            if ($auth->role_id > 1) $list = $list->where("active", true);
+            if ($auth->role_id > 2) $list = $list->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -143,7 +143,6 @@ class FamilyDataController extends Controller
             // Log::info("SitationController ~ show ~ FamilyData" . json_encode($FamilyData));
             $familyData = $FamilyData::with([
                 'requester',
-                'beneficiary',
                 'subcategory',
                 // 'situationSetting',
                 'register',

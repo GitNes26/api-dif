@@ -6,6 +6,7 @@ use App\Models\Department;
 use App\Models\ObjResponse;
 use App\Models\Situation;
 use App\Models\VW_Situation;
+use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,9 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+            $departmentByUser = Department::find($userEmployee->department_id);
+
             // $list = VW_Situation::orderBy('id', 'desc');
             $list = Situation::with([
                 'requester',
@@ -38,7 +42,7 @@ class SituationController extends Controller
                 'documentsData',
                 'evidencesData'
             ])->orderBy('id', 'desc');
-            if ($auth->role_id > 1) $list = $list->where("active", true);
+            if ($auth->role_id > 2) $list = $list->where("active", true)->where('folio', 'like', "$departmentByUser->letters-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -145,7 +149,11 @@ class SituationController extends Controller
             // Log::info("situacion: " . $situation);
 
             $situation->fill($request->all());
-            // $situation->folio = $folio;
+            if ($request->current_page == 2) {
+                $situation->status = "en_seguimiento";
+                $situation->follow_up_by = $userAuth->id;
+                $situation->follow_up_at = date('Y-m-d H:i:s');
+            }
             // $situation->requester_id = $request->requester_id;
             $situation->save();
             // Log::info("situacion editada: " . $situation);

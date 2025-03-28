@@ -24,7 +24,6 @@ class EconomicData extends Model
         'situation_id',
         'monthly_income',
         'monthly_expenses',
-        'active',
     ];
 
     /**

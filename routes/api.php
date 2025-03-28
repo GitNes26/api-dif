@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentDataController;
 use App\Http\Controllers\EconomicDataController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EvidenceDataController;
 use App\Http\Controllers\FamilyDataController;
 use App\Http\Controllers\LivingConditionsDataController;
 use App\Http\Controllers\MenuController;
@@ -196,7 +197,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/createOrUpdate/{id?}", [FamilyDataController::class, 'createOrUpdate']);
         Route::get("/delete/{id}", [FamilyDataController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [FamilyDataController::class, 'disEnable']);
-        Route::get("/deleteMultiple", [FamilyDataController::class, 'deleteMultiple']);
+        Route::post("/deleteMultiple", [FamilyDataController::class, 'deleteMultiple']);
     });
     Route::prefix("livingData")->group(function () {
         Route::get("/", [LivingConditionsDataController::class, 'index']);
@@ -223,5 +224,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [DocumentDataController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [DocumentDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [DocumentDataController::class, 'deleteMultiple']);
+    });
+    Route::prefix("evidenceData")->group(function () {
+        Route::get("/", [EvidenceDataController::class, 'index']);
+        Route::get("/id/{id}", [EvidenceDataController::class, 'show']);
+        Route::get("/indexByFolio/{folio}", [EvidenceDataController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id}/folio/{folio}", [EvidenceDataController::class, 'createOrUpdate']);
+        Route::post("/createOrUpdate/folio/{folio}", [EvidenceDataController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [EvidenceDataController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [EvidenceDataController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [EvidenceDataController::class, 'deleteMultiple']);
     });
 });

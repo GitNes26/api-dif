@@ -39,10 +39,10 @@ class RoleSeeder extends Seeder
             [
                 'role' => 'Director', #3
                 'description' => 'Rol dedicado para el director del DIF.',
-                'read' => '',
-                'create' => '',
-                'update' => '',
-                'delete' => '',
+                'read' => '1,2,4,7,8,9,12,13,14,15,16,17,19,20,21,22,23,24',
+                'create' => '2,7,8,9,13,14,15,17,20,21,22,23,24',
+                'update' => '2,7,8,9,13,14,15,17,20,21,22,23,24',
+                'delete' => '2,7,8,9,13,14,15,17,20,21,22,23,24',
                 'more_permissions' => '',
                 'page_index' => '/app',
                 'created_at' => now(),
@@ -50,10 +50,10 @@ class RoleSeeder extends Seeder
             [
                 'role' => 'Encargado', #4
                 'description' => 'Rol dedicado para personal encargado del departamento.',
-                'read' => '',
-                'create' => '',
-                'update' => '',
-                'delete' => '',
+                'read' => '1,2,4,7,8,9,12,13,14,16,17,19',
+                'create' => '2,8,9,13,14,17',
+                'update' => '2,8,9,13,14,17',
+                'delete' => '2,8,17',
                 'more_permissions' => '',
                 'page_index' => '/app',
                 'created_at' => now(),
@@ -61,10 +61,10 @@ class RoleSeeder extends Seeder
             [
                 'role' => 'Recepcionista', #5
                 'description' => 'Rol dedicado para personal encargado del departamento.',
-                'read' => '',
-                'create' => '',
-                'update' => '',
-                'delete' => '',
+                'read' => '1,2,4,7,8,9,12,13,14,15,16,17,19,20',
+                'create' => '2,7,8,9,13,14,15,17,20',
+                'update' => '2,13,14,15',
+                'delete' => '2',
                 'more_permissions' => '',
                 'page_index' => '/app',
                 'created_at' => now(),
