@@ -87,7 +87,6 @@ php artisan migrate:refresh --path=database/migrations/becas --database=mysql_be
 php artisan db:seed --class=DatabaseSeeder
 ```
 
-
 ## CONFIGURACIONES
 
 ###### Region `/config/app.php`
@@ -114,7 +113,7 @@ Para permitir el correcto paso de peticiones. Asegurarse de tener estas propieda
 
 ###### Limite de peticiones `/app/Providers/RouteServiceProvider.php`
 
-Si deseas ampliar el limite de peticiones por minuto.
+Si deseas ampliar el limite de peticiones por minuto.  samuel
 
 ```php
 RateLimiter::for('api', function (Request $request) {
