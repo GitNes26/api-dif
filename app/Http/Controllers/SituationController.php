@@ -25,7 +25,15 @@ class SituationController extends Controller
         try {
             $auth = Auth::user();
             $userEmployee = VW_User::where('id', $auth->id)->first();
+            if (!$userEmployee) {
+                $response->data = ObjResponse::SuccessResponse();
+                $response->data["message"] = 'Peticion satisfactoria | Lista de situaciones.';
+                $response->data["alert_text"] = "Vincula tu usuario a un empleado para saber a que departamento perteneces.";
+                $response->data["result"] = [];
+                return response()->json($response, $response->data["status_code"]);
+            }
             $departmentByUser = Department::find($userEmployee->department_id);
+
 
             // $list = VW_Situation::orderBy('id', 'desc');
             $list = Situation::with([
@@ -42,7 +50,7 @@ class SituationController extends Controller
                 'documentsData',
                 'evidencesData'
             ])->orderBy('id', 'desc');
-            if ($auth->role_id > 2) $list = $list->where("active", true)->where('folio', 'like', "$departmentByUser->letters-%");
+            if ($auth->role_id > 2) $list = $list->where("active", true)->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
