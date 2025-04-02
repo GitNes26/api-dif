@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('situation_id')->constrained('situations');
             $table->string('name_doc');
-            $table->string('description_doc');
+            $table->string('description_doc')->nullable();
             $table->string('img_doc', 255);
             $table->boolean('active')->default(true);
             $table->timestamps();

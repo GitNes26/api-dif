@@ -190,6 +190,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [SituationController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [SituationController::class, 'disEnable']);
         Route::get("/deleteMultiple", [SituationController::class, 'deleteMultiple']);
+        Route::post("/{id}/authorizationOrRejection", [SituationController::class, 'authorizationOrRejection']);
     });
     Route::prefix("familyData")->group(function () {
         Route::get("/", [FamilyDataController::class, 'index']);

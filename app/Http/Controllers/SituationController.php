@@ -50,7 +50,7 @@ class SituationController extends Controller
                 'documentsData',
                 'evidencesData'
             ])->orderBy('id', 'desc');
-            if ($auth->role_id > 2) $list = $list->where("active", true)->where('folio', 'like', $departmentByUser->letters . "-%");
+            if ($auth->role_id > 3) $list = $list->where("active", true)->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -157,7 +157,7 @@ class SituationController extends Controller
             // Log::info("situacion: " . $situation);
 
             $situation->fill($request->all());
-            if ($request->current_page == 2) {
+            if ((int)$request->current_page == 2) {
                 $situation->status = "en_seguimiento";
                 $situation->follow_up_by = $userAuth->id;
                 $situation->follow_up_at = date('Y-m-d H:i:s');
@@ -337,6 +337,39 @@ class SituationController extends Controller
             $response->data["alert_text"] = "Firma Cargada";
         } catch (\Exception $ex) {
             $msg = "SituationController ~ saveFirmRequester ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    public function authorizationOrRejection(Request $request, Response $response, Int $id)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $userAuth = Auth::user();
+            $situation = Situation::find($id);
+            // Log::info("situacion: " . $situation);
+
+            $situation->fill($request->all());
+            if ((bool)$request->finish) $situation->status = "cerrado";
+            if ((bool)$request->authorization) {
+                $situation->authorized_by = $userAuth->id;
+                $situation->authorized_at = date('Y-m-d H:i:s');
+            } else {
+                $situation->status = "rechazado";
+                $situation->rejected_by = $userAuth->id;
+                $situation->rejected_at = date('Y-m-d H:i:s');
+                $situation->rejected_comment = $request->rejected_comment;
+            }
+            $situation->save();
+
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'situacion autorizada/rechazada.';
+            $response->data["alert_text"] = (bool)$request->authorization ? "Solicitud autorizada" : "Solicitud Rechazada";
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ authorizationOrRejection ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }
