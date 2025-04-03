@@ -312,9 +312,15 @@ class SituationController extends Controller
     private function getLastFolio(string $letters = null)
     {
         try {
-            $folio = Situation::max('folio');
-            if ($letters) $folio = Situation::where('folio', 'like', "$letters-%")->max('folio');
+            if (!$letters) {
+                return 0; // Si no hay prefijo, regresar 0
+            }
 
+            $folio = Situation::where('folio', 'like', "$letters-%")
+                ->selectRaw("MAX(CAST(SUBSTRING_INDEX(folio, '-', -1) AS UNSIGNED)) as max_folio")
+                ->value('max_folio');
+
+            Log::info("getLastFolio ~ folio:" . $folio);
             return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
             $msg =  "SitationController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
@@ -370,6 +376,42 @@ class SituationController extends Controller
             $response->data["alert_text"] = (bool)$request->authorization ? "Solicitud autorizada" : "Solicitud Rechazada";
         } catch (\Exception $ex) {
             $msg = "SituationController ~ authorizationOrRejection ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    /**
+     * Mostrar historial de situaciones por ciudadano.
+     *
+     * @return \Illuminate\Http\Response $response
+     */
+    public function history(Request $request, Response $response, Int $personal_info_id)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            $list = Situation::with([
+                'requester',
+                'subcategory',
+                // 'situationSetting',
+                'register',
+                'authorizer',
+                'followUper',
+                'rejecter',
+                'familyData',
+                'livingData',
+                'economicData',
+                'documentsData',
+                'evidencesData'
+            ])->orderBy('id', 'desc');
+            $list = $list->where("active", true)->where('requester_id', $personal_info_id)->get();
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Peticion satisfactoria | Historial de situaciones.';
+            $response->data["result"] = $list;
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ history ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }
