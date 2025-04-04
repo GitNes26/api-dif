@@ -127,7 +127,7 @@ class SituationController extends Controller
             $situation->folio = $folio;
             $situation->requester_id = $request->requester_id;
             $situation->subcategory_id = $request->subcategory_id;
-            $situation->registered_by = is_null($id) && $userAuth->id;
+            if (is_null($id)) $situation->registered_by = $userAuth->id;
             $situation->description = $request->description;
             $situation->save();
 
