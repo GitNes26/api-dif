@@ -187,7 +187,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route::get("/id/{id}", [SituationController::class, 'show']);
         // Route::get("/folio/{folio}", [SituationController::class, 'show']);
-        Route::get("/delete/{id}", [SituationController::class, 'delete']);
+        Route::get("/delete/id/{id}", [SituationController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [SituationController::class, 'disEnable']);
         Route::get("/deleteMultiple", [SituationController::class, 'deleteMultiple']);
         Route::post("/{id}/authorizationOrRejection", [SituationController::class, 'authorizationOrRejection']);
