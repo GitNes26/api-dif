@@ -103,6 +103,7 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $userAuth = Auth::user();
+            Log::info("userAuth:" . $userAuth);
             // $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
             // if ($duplicate["result"] == true) {
             //     $response->data = $duplicate;
