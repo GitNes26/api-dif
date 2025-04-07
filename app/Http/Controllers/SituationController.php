@@ -321,7 +321,7 @@ class SituationController extends Controller
                 ->selectRaw("MAX(CAST(SUBSTRING_INDEX(folio, '-', -1) AS UNSIGNED)) as max_folio")
                 ->value('max_folio');
 
-            Log::info("getLastFolio ~ folio:" . $folio);
+            // Log::info("getLastFolio ~ folio:" . $folio);
             return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
             $msg =  "SitationController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
