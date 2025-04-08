@@ -35,6 +35,7 @@ return new class extends Migration
             $table->integer('situation_settings_id')->nullable();
             $table->foreignId('registered_by')->constrained('users')->comment("es el usuario del empleado que registra el caso en recepción.");
             $table->integer('authorized_by')->nullable();
+            $table->text('authorized_comment')->nullable();
             $table->dateTime('authorized_at')->nullable();
             $table->integer('follow_up_by')->nullable();
             $table->dateTime('follow_up_at')->nullable();

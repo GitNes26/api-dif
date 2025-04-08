@@ -134,7 +134,7 @@ class SituationController extends Controller
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | situacion editada.' : 'peticion satisfactoria | situacion registrada.';
-            $response->data["alert_text"] = $id > 0 ? "Situación editada" : "Situación registrada";
+            $response->data["alert_text"] = $id > 0 ? "Situación editada" : "<h3>Situación registrada. </br> folio: <b>$situation->folio</b></h3>";
         } catch (\Exception $ex) {
             $msg = "SituationController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
@@ -362,12 +362,13 @@ class SituationController extends Controller
             if ((bool)$request->finish) $situation->status = "cerrado";
             if ((bool)$request->authorization) {
                 $situation->authorized_by = $userAuth->id;
+                $situation->authorized_comment = $request->authorized_comment;
                 $situation->authorized_at = date('Y-m-d H:i:s');
             } else {
                 $situation->status = "rechazado";
                 $situation->rejected_by = $userAuth->id;
-                $situation->rejected_at = date('Y-m-d H:i:s');
                 $situation->rejected_comment = $request->rejected_comment;
+                $situation->rejected_at = date('Y-m-d H:i:s');
             }
             $situation->save();
 

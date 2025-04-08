@@ -48,6 +48,7 @@ class Situation extends Model
 
         'registered_by', #tabla users
         'authorized_by', #tabla users
+        'authorized_comment',
         'authorized_at',
         'follow_up_by', #tabla users
         'follow_up_at',
