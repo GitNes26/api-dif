@@ -17,6 +17,7 @@ use App\Http\Controllers\SituationController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ReceiptController;
 use App\Models\Menu;
 use App\Models\ObjResponse;
 use Illuminate\Http\Request;
@@ -236,5 +237,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/delete/{id}", [EvidenceDataController::class, 'delete']);
         Route::get("/disEnable/{id}/{active}", [EvidenceDataController::class, 'disEnable']);
         Route::get("/deleteMultiple", [EvidenceDataController::class, 'deleteMultiple']);
+    });
+    Route::prefix("receipts")->group(function () {
+        Route::get("/", [ReceiptController::class, 'index']);
+        Route::get("/id/{id}", [ReceiptController::class, 'show']);
+        Route::get("/indexByFolio/{folio}", [ReceiptController::class, 'indexByFolio']);
+        Route::post("/createOrUpdate/{id?}", [ReceiptController::class, 'createOrUpdate']);
+        // Route::post("/createOrUpdate/folio/{folio}", [ReceiptController::class, 'createOrUpdate']);
+        Route::get("/delete/{id}", [ReceiptController::class, 'delete']);
+        Route::get("/disEnable/{id}/{active}", [ReceiptController::class, 'disEnable']);
+        Route::get("/deleteMultiple", [ReceiptController::class, 'deleteMultiple']);
     });
 });

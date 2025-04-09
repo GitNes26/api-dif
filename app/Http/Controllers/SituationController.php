@@ -48,7 +48,8 @@ class SituationController extends Controller
                 'livingData',
                 'economicData',
                 'documentsData',
-                'evidencesData'
+                'evidencesData',
+                'receipt'
             ])->orderBy('id', 'desc');
             if ($auth->role_id > 3) $list = $list->where("active", true)->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
@@ -148,11 +149,6 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $userAuth = Auth::user();
-            // $duplicate = $this->validateAvailableData($request->full_name, $request->cellphone, $id);
-            // if ($duplicate["result"] == true) {
-            //     $response->data = $duplicate;
-            //     return response()->json($response);
-            // }
 
             $situation = Situation::find($id);
             // Log::info("situacion: " . $situation);
@@ -204,7 +200,8 @@ class SituationController extends Controller
                 'livingData',
                 'economicData',
                 'documentsData',
-                'evidencesData'
+                'evidencesData',
+                'receipt'
             ])->findOrFail($Situation->id);
 
             if ($internal) return $situation;
@@ -405,7 +402,8 @@ class SituationController extends Controller
                 'livingData',
                 'economicData',
                 'documentsData',
-                'evidencesData'
+                'evidencesData',
+                'receipt'
             ])->orderBy('id', 'desc');
             $list = $list->where("active", true)->where('requester_id', $personal_info_id)->get();
 

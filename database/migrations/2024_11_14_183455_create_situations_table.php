@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('situations', function (Blueprint $table) {
             $table->id();
-            $table->string("folio")->unique()->comment("su estrucutura sera, letras del departamento, guion medio, numeracion por departamento, ej. PR-1");
+            $table->string("folio")->unique()->comment("su estructura sera, letras del departamento, guion medio, numeracion por departamento, ej. PR-1");
             $table->foreignId('requester_id')->constrained('personal_info');
             $table->string('beneficiary', 255)->nullable();
             $table->integer('beneficiary_age')->nullable();
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('evidences_data_finish')->nullable();
             $table->boolean('finish')->nullable();
             $table->string('img_firm_requester')->nullable();
+            $table->decimal('amount', 11, 2)->nullable();
 
             $table->integer('current_page')->default(1)->nullable();
             $table->dateTime('end_date')->nullable();

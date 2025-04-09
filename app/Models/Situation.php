@@ -41,6 +41,7 @@ class Situation extends Model
         'evidences_data_finish',
         'finish',
         'img_firm_requester',
+        'amount',
         'situation_settings_id', #tabla sutuation_settings
 
         'current_page',
@@ -136,6 +137,11 @@ class Situation extends Model
     public function evidencesData()
     {
         return $this->hasMany(EvidenceData::class, 'situation_id');
+    }
+
+    public function Receipt()
+    {
+        return $this->hasOne(Receipt::class, 'situation_id');
     }
 
     /**
