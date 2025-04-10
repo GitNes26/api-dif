@@ -53,7 +53,7 @@ class SituationController extends Controller
                 'receipt'
             ])->orderBy('id', 'desc');
             if ($auth->role_id > 3) $list = $list->where("active", true);
-            if (!str_contains($userEmployee->more_permissions, 'Ver Todas las Situaciones')) $list = $list->where('folio', 'like', $departmentByUser->letters . "-%");
+             if (!\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();

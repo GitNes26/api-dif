@@ -27,7 +27,7 @@ class SubcategoryController extends Controller
 
             $list = VW_Subcategory::orderBy('department', 'asc')->orderBy('category', 'asc')->orderBy('subcategory', 'asc');
             $list = $list->get();
-            if ($auth->role_id > 3 && $userEmployee && !str_contains($userEmployee->more_permissions, 'Ver Todas las Situaciones')) $list = DB::select("call sp_affairs_by_department(?)", [$userEmployee->department_id]);
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = DB::select("call sp_affairs_by_department(?)", [$userEmployee->department_id]);
             // Log::info('SP_affairsByDepartment ~ list: ' . $list);
 
             $response->data = ObjResponse::SuccessResponse();
