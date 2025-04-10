@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ObjResponse;
 use App\Models\Receipt;
+use App\Models\Situation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,30 @@ class ReceiptController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
-            $list = Receipt::orderBy('id', 'desc');
+            // $list = Receipt::orderBy('id', 'desc');
+            // if ($auth->role_id > 2) $list = $list->where("active", true);
+            // $list = $list->get();
+
+            $receiptSituationIds = Receipt::pluck('situation_id')->unique()->filter();
+            $list = Situation::with([
+                'requester',
+                'subcategory',
+                // 'situationSetting',
+                'register',
+                'authorizer',
+                'followUper',
+                'rejecter',
+                'familyData',
+                'livingData',
+                'economicData',
+                'documentsData',
+                'evidencesData',
+                'receipt'
+            ])->whereIn('id', $receiptSituationIds)->orderBy('id', 'desc');
             if ($auth->role_id > 2) $list = $list->where("active", true);
             $list = $list->get();
+
+
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'Peticion satisfactoria | Lista de Recibos.';

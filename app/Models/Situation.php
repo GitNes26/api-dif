@@ -139,7 +139,7 @@ class Situation extends Model
         return $this->hasMany(EvidenceData::class, 'situation_id');
     }
 
-    public function Receipt()
+    public function receipt()
     {
         return $this->hasOne(Receipt::class, 'situation_id');
     }

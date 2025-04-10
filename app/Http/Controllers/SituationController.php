@@ -32,6 +32,7 @@ class SituationController extends Controller
                 $response->data["result"] = [];
                 return response()->json($response, $response->data["status_code"]);
             }
+            // Log::info("userEmployee" . $userEmployee);
             $departmentByUser = Department::find($userEmployee->department_id);
 
 
@@ -51,7 +52,8 @@ class SituationController extends Controller
                 'evidencesData',
                 'receipt'
             ])->orderBy('id', 'desc');
-            if ($auth->role_id > 3) $list = $list->where("active", true)->where('folio', 'like', $departmentByUser->letters . "-%");
+            if ($auth->role_id > 3) $list = $list->where("active", true);
+            if (!str_contains($userEmployee->more_permissions, 'Ver Todas las Situaciones')) $list = $list->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();

@@ -34,4 +34,10 @@ class Receipt extends Model
      * @var string
      */
     protected $primaryKey = 'id';
+
+    // Relación con la tabla situations
+    public function situation()
+    {
+        return $this->hasOne(Situation::class, 'situation_id');
+    }
 }
