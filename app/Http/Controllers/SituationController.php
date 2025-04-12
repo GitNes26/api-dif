@@ -53,7 +53,7 @@ class SituationController extends Controller
                 'receipt'
             ])->orderBy('id', 'desc');
             if ($auth->role_id > 3) $list = $list->where("active", true);
-             if (!\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where('folio', 'like', $departmentByUser->letters . "-%");
+            if (!\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where('folio', 'like', $departmentByUser->letters . "-%");
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -155,11 +155,15 @@ class SituationController extends Controller
             $situation = Situation::find($id);
             // Log::info("situacion: " . $situation);
 
-            $situation->fill($request->all());
             if ((int)$request->current_page == 2) {
                 $situation->status = "en_seguimiento";
                 $situation->follow_up_by = $userAuth->id;
                 $situation->follow_up_at = date('Y-m-d H:i:s');
+            } elseif ((bool)$request->finish) {
+                $situation->status = "cerrado";
+                $situation->end_date = date('Y-m-d H:i:s');
+            } else {
+                $situation->fill($request->all());
             }
             // $situation->requester_id = $request->requester_id;
             $situation->save();
@@ -170,7 +174,7 @@ class SituationController extends Controller
             $response->data["message"] = 'situacion editada.';
             $response->data["alert_text"] = "Sección completada";
         } catch (\Exception $ex) {
-            $msg = "SituationController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
+            $msg = "SituationController ~ followUp ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }
