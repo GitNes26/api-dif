@@ -138,6 +138,7 @@ class SituationController extends Controller
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $id > 0 ? 'peticion satisfactoria | situacion editada.' : 'peticion satisfactoria | situacion registrada.';
             $response->data["alert_text"] = $id > 0 ? "Situación editada" : "<h3>Situación registrada. </br> folio: <b>$situation->folio</b></h3>";
+            $response->data["result"] = $situation;
         } catch (\Exception $ex) {
             $msg = "SituationController ~ createOrUpdate ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
