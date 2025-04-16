@@ -321,7 +321,7 @@ class SituationController extends Controller
                 return 0; // Si no hay prefijo, regresar 0
             }
 
-            $folio = Situation::where('folio', 'like', "$letters-%")
+            $folio = Situation::where('active', true)->where('folio', 'like', "$letters-%")
                 ->selectRaw("MAX(CAST(SUBSTRING_INDEX(folio, '-', -1) AS UNSIGNED)) as max_folio")
                 ->value('max_folio');
 
