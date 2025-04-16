@@ -157,6 +157,7 @@ class SituationController extends Controller
             // Log::info("situacion: " . $situation);
 
             if ((int)$request->current_page == 2) {
+                $situation->fill($request->all());
                 $situation->status = "en_seguimiento";
                 $situation->follow_up_by = $userAuth->id;
                 $situation->follow_up_at = date('Y-m-d H:i:s');
