@@ -158,11 +158,11 @@ class SituationController extends Controller
 
             if ((int)$request->current_page == 2) {
                 $situation->fill($request->all());
-                $situation->status = "en_seguimiento";
+                $situation->status = "EN SEGUIMIENTO";
                 $situation->follow_up_by = $userAuth->id;
                 $situation->follow_up_at = date('Y-m-d H:i:s');
             } elseif ((bool)$request->finish) {
-                $situation->status = "cerrado";
+                $situation->status = "CERRADO";
                 $situation->end_date = date('Y-m-d H:i:s');
             } else {
                 $situation->fill($request->all());
@@ -364,13 +364,13 @@ class SituationController extends Controller
             // Log::info("situacion: " . $situation);
 
             $situation->fill($request->all());
-            if ((bool)$request->finish) $situation->status = "cerrado";
+            if ((bool)$request->finish) $situation->status = "CERRADO";
             if ((bool)$request->authorization) {
                 $situation->authorized_by = $userAuth->id;
                 $situation->authorized_comment = $request->authorized_comment;
                 $situation->authorized_at = date('Y-m-d H:i:s');
             } else {
-                $situation->status = "rechazado";
+                $situation->status = "RECHAZADO";
                 $situation->rejected_by = $userAuth->id;
                 $situation->rejected_comment = $request->rejected_comment;
                 $situation->rejected_at = date('Y-m-d H:i:s');

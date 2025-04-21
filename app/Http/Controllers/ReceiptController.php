@@ -100,10 +100,14 @@ class ReceiptController extends Controller
             $receipt = Receipt::find($id);
             if (!$receipt) $receipt = new Receipt();
 
-            $folio = $this->getLastFolio();
+            if ($request->folio) $folio = $request->folio;
+            else {
+                $folio = $this->getLastFolio(false);
+                $folio += 1;
+            }
 
             $receipt->fill($request->all());
-            $receipt->num_folio = $folio += 1;
+            $receipt->num_folio = $folio;
             $receipt->authorized_by = $userAuth->id;
             $receipt->save();
 
@@ -232,13 +236,20 @@ class ReceiptController extends Controller
      *
      * @return \Illuminate\Http\Int $folio
      */
-    private function getLastFolio()
+    public function getLastFolio(Response $response, bool $newFolio = true)
     {
         try {
             $folio = Receipt::where('active', true)->max('num_folio');
-
             // Log::info("getLastFolio ~ folio:" . $folio);
-            return $folio ?? 0; // Si no hay folio, regresar 0
+            if ((bool) $newFolio) {
+                $folio += 1 ?? 1;
+
+                $response->data = ObjResponse::SuccessResponse();
+                $response->data["message"] = 'peticion satisfactoria | folio generado.';
+                $response->data["alert_text"] = "Nuevo folio";
+                $response->data["result"] = $folio;
+                return response()->json($response, $response->data["status_code"]);
+            } else return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
             $msg =  "ReceiptController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
             Log::error($msg);

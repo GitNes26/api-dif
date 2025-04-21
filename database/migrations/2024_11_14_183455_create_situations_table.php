@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('subcategory_id')->constrained('subcategories');
             $table->text("description")->nullable();
             $table->text("support")->nullable();
-            $table->enum("status", ["abierto", "en_seguimiento", "cerrado", "cancelado"]);
+            $table->enum("status", ["ABIERTO", "EN SEGUIMIENTO", "CERRADO", "RECHAZADO", "CANCELADO"]);
             $table->boolean('family_data_finish')->nullable();
             $table->boolean('living_conditions_data_finish')->nullable();
             $table->boolean('economic_data_finish')->nullable();
