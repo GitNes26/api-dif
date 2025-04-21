@@ -88,8 +88,8 @@ class EmployeeController extends Controller
             $employee->fill($request->except(['avatar', 'img_firm']));
             $employee->save();
 
-            $this->ImageUp($request, 'avatar', "employees", $id, 'AVATAR', $id == null ? true : false, "noImage.png", $employee);
-            $this->ImageUp($request, 'img_firm', "employees", $id, 'FIRMA', $id == null ? true : false, "noImage.png", $employee);
+            $this->ImageUp($request, 'avatar', "employees", $employee->id, 'AVATAR', $id == null ? true : false, "noImage.png", $employee);
+            $this->ImageUp($request, 'img_firm', "employees", $employee->id, 'FIRMA', $id == null ? true : false, "noImage.png", $employee);
 
 
             $response->data = ObjResponse::SuccessResponse();
