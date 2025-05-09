@@ -183,7 +183,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/selectIndex", [SituationController::class, 'selectIndex']);
         Route::post("/createOrUpdate/{id?}", [SituationController::class, 'createOrUpdate']);
         Route::post("/followUp/{id}", [SituationController::class, 'followUp']);
-        Route::get("/{column}/{value}", [SituationController::class, 'show']);
+        Route::get("/{column}/value/{value}", [SituationController::class, 'show']);
         Route::post("/{id}/saveFirmRequester", [SituationController::class, 'saveFirmRequester']);
 
         // Route::get("/id/{id}", [SituationController::class, 'show']);
@@ -193,6 +193,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/deleteMultiple", [SituationController::class, 'deleteMultiple']);
         Route::post("/{id}/authorizationOrRejection", [SituationController::class, 'authorizationOrRejection']);
         Route::get("/ciudadano/{personal_info_id}/history", [SituationController::class, 'history']);
+        Route::get("/{id}/returnStatusToSituation", [SituationController::class, 'returnStatusToSituation']);
     });
     Route::prefix("familyData")->group(function () {
         Route::get("/", [FamilyDataController::class, 'index']);

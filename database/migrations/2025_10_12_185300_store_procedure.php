@@ -20,6 +20,15 @@ return new class extends Migration
             END
             "
         );
+
+        DB::statement(
+            "CREATE PROCEDURE `sp_return_status_to_situation`(in in_situtation_id int)
+            BEGIN
+                UPDATE situations SET documents_data_finish=0, current_page=5, status='EN SEGUIMIENTO'
+                WHERE id = in_situtation_id;
+            END
+            "
+        );
     }
 
     /**

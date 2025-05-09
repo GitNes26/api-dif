@@ -10,6 +10,7 @@ use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class SituationController extends Controller
@@ -420,6 +421,23 @@ class SituationController extends Controller
             $response->data["result"] = $list;
         } catch (\Exception $ex) {
             $msg = "SituationController ~ history ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    public function returnStatusToSituation(Request $request, Response $response, Int $id)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            DB::statement("call sp_return_status_to_situation(?)", [$id]);
+
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'Caso Re-abierto.';
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ authorizationOrRejection ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }
