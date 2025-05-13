@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\ObjResponse;
+use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -46,9 +47,18 @@ class DepartmentController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            // $list = Department::where('active', true)
+            //     ->select('id as id', DB::raw("CONCAT(COALESCE(letters, ''),' - ',department) as label"))
+            //     ->orderBy('department', 'asc')->get();
+
+            $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+
             $list = Department::where('active', true)
                 ->select('id as id', DB::raw("CONCAT(COALESCE(letters, ''),' - ',department) as label"))
-                ->orderBy('department', 'asc')->get();
+                ->orderBy('department', 'asc');
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where("id", $userEmployee->department_id);
+            $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | lista de departamentos.';

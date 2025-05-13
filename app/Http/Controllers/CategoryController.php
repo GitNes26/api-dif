@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\ObjResponse;
 use App\Models\VW_Category;
+use App\Models\VW_User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,16 @@ class CategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            // $auth = Auth::user();
+            // $list = VW_Category::orderBy('id', 'desc');
+            // if ($auth->role_id > 2) $list = $list->where("active", true);
+            // $list = $list->get();
+
             $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+
             $list = VW_Category::orderBy('id', 'desc');
-            if ($auth->role_id > 2) $list = $list->where("active", true);
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where("department_id", $userEmployee->department_id)->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -44,9 +52,18 @@ class CategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            // $list = VW_Category::where('active', true)
+            //     ->select('id as id', 'category as label')
+            //     ->orderBy('category', 'asc')->get();
+
+            $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+
             $list = VW_Category::where('active', true)
                 ->select('id as id', 'category as label')
-                ->orderBy('category', 'asc')->get();
+                ->orderBy('category', 'asc');
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where("department_id", $userEmployee->department_id);
+            $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | lista de categorias.';

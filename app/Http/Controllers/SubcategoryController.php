@@ -53,8 +53,11 @@ class SubcategoryController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+
             $list = VW_Subcategory::orderBy('id', 'desc');
-            if ($auth->role_id > 2) $list = $list->where("active", true);
+            // if ($auth->role_id > 2) $list = $list->where("active", true);
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where("department_id", $userEmployee->department_id)->where("active", true);
             $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
@@ -77,9 +80,19 @@ class SubcategoryController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
+            // $list = VW_Subcategory::where('active', true)
+            //     ->select('id as id', 'subcategory as label')
+            //     ->orderBy('subcategory', 'asc')->get();
+
+
+            $auth = Auth::user();
+            $userEmployee = VW_User::where('id', $auth->id)->first();
+
             $list = VW_Subcategory::where('active', true)
                 ->select('id as id', 'subcategory as label')
-                ->orderBy('subcategory', 'asc')->get();
+                ->orderBy('subcategory', 'asc');
+            if ($auth->role_id > 3 && $userEmployee && !\Str::contains($userEmployee->more_permissions, ['Ver Todas las Situaciones', 'todas'])) $list = $list->where("department_id", $userEmployee->department_id);
+            $list = $list->get();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | lista de subcategorias.';
