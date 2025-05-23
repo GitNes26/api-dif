@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ObjResponse;
 use App\Models\Receipt;
 use App\Models\Situation;
+use App\Models\VW_Receipt;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -133,7 +134,7 @@ class ReceiptController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            $receipt = Receipt::find($id);
+            $receipt = VW_Receipt::find($id);
             if ($internal) return $receipt;
 
             $response->data = ObjResponse::SuccessResponse();
