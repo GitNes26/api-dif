@@ -101,14 +101,14 @@ class ReceiptController extends Controller
             $receipt = Receipt::find($id);
             if (!$receipt) $receipt = new Receipt();
 
-            if ($request->folio) $folio = $request->folio;
+            if ($request->num_folio) $num_folio = $request->num_folio;
             else {
-                $folio = $this->getLastFolio(false);
-                $folio += 1;
+                $num_folio = $this->getLastNumFolio(false);
+                $num_folio += 1;
             }
 
             $receipt->fill($request->all());
-            $receipt->num_folio = $folio;
+            $receipt->num_folio = $num_folio;
             $receipt->authorized_by = $userAuth->id;
             $receipt->save();
 
@@ -233,26 +233,26 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Obtener el ultimo folio.
+     * Obtener el ultimo num_folio.
      *
-     * @return \Illuminate\Http\Int $folio
+     * @return \Illuminate\Http\Int $num_folio
      */
-    public function getLastFolio(Response $response, bool $newFolio = true)
+    public function getLastNumFolio(Response $response, bool $newNumFolio = true)
     {
         try {
-            $folio = Receipt::where('active', true)->max('num_folio');
-            // Log::info("getLastFolio ~ folio:" . $folio);
-            if ((bool) $newFolio) {
-                $folio += 1 ?? 1;
+            $num_folio = Receipt::where('active', true)->max('num_folio');
+            // Log::info("getLastNumFolio ~ num_folio:" . $num_folio);
+            if ((bool) $newNumFolio) {
+                $num_folio += 1 ?? 1;
 
                 $response->data = ObjResponse::SuccessResponse();
-                $response->data["message"] = 'peticion satisfactoria | folio generado.';
-                $response->data["alert_text"] = "Nuevo folio";
-                $response->data["result"] = $folio;
+                $response->data["message"] = 'peticion satisfactoria | num folio generado.';
+                $response->data["alert_text"] = "Nuevo num folio";
+                $response->data["result"] = $num_folio;
                 return response()->json($response, $response->data["status_code"]);
-            } else return $folio ?? 0; // Si no hay folio, regresar 0
+            } else return $num_folio ?? 0; // Si no hay num_folio, regresar 0
         } catch (\Exception $ex) {
-            $msg =  "ReceiptController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
+            $msg =  "ReceiptController ~ getLastNumFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
             Log::error($msg);
             return $msg;
         }

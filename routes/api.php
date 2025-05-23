@@ -249,6 +249,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/disEnable/{id}/{active}", [ReceiptController::class, 'disEnable']);
         Route::get("/deleteMultiple", [ReceiptController::class, 'deleteMultiple']);
 
-        Route::get("/getLastFolio", [ReceiptController::class, 'getLastFolio']);
+        Route::get("/getLastNumFolio", [ReceiptController::class, 'getLastNumFolio']);
     });
 });
