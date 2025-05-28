@@ -196,7 +196,7 @@ class SituationController extends Controller
         $response->data = ObjResponse::DefaultResponse();
         try {
             $Situation = Situation::where($column, $value)->first();
-            // Log::info("SitationController ~ show ~ Situation" . json_encode($Situation));
+            // Log::info("SituationController ~ show ~ Situation" . json_encode($Situation));
             $situation = $Situation::with([
                 'requester',
                 'subcategory',
@@ -214,7 +214,7 @@ class SituationController extends Controller
             ])->findOrFail($Situation->id);
 
             if ($internal) return $situation;
-            // Log::info("SitationController ~ show ~ situtation" . json_encode($situation));
+            // Log::info("SituationController ~ show ~ situtation" . json_encode($situation));
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
@@ -330,7 +330,7 @@ class SituationController extends Controller
             // Log::info("getLastFolio ~ folio:" . $folio);
             return $folio ?? 0; // Si no hay folio, regresar 0
         } catch (\Exception $ex) {
-            $msg =  "SitationController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
+            $msg =  "SituationController ~ getLastFolio ~ Error al obtener Ultimo Folio: " . $ex->getMessage();
             Log::error($msg);
             return $msg;
         }
@@ -438,6 +438,76 @@ class SituationController extends Controller
             $response->data["message"] = 'Caso Re-abierto.';
         } catch (\Exception $ex) {
             $msg = "SituationController ~ authorizationOrRejection ~ Hubo un error -> " . $ex->getMessage();
+            Log::error($msg);
+            $response->data = ObjResponse::CatchResponse($msg);
+        }
+        return response()->json($response, $response->data["status_code"]);
+    }
+
+    /**
+     * Mostrar situacion.
+     *
+     * @param   int $id
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response $response
+     */
+    public function getPreviousSituation(Request $request, Response $response, Int $id, bool $internal = false)
+    {
+        $response->data = ObjResponse::DefaultResponse();
+        try {
+            // $currentSituation = Situation::find($id);
+            // $previousSituation = Situation::where('id', '<>', $currentSituation->id)->where('requester_id', $currentSituation->requester_id)->orderBy('id', 'desc')->limit(1)->first();
+            // // Log::info("SituationController ~ getPreviousSituation ~ Situation" . json_encode($Situation));
+            // $situation = $Situation::with([
+            //     'requester',
+            //     'subcategory',
+            //     // 'situationSetting',
+            //     'register',
+            //     'authorizer',
+            //     'followUper',
+            //     'rejecter',
+            //     'familyData',
+            //     'livingData',
+            //     'economicData',
+            //     'documentsData',
+            //     'evidencesData',
+            //     'receipt'
+            // ])->findOrFail($previousSituation->id);
+
+            // Obtener la situación actual y la anterior en una sola consulta
+            $currentSituation = Situation::findOrFail($id);
+
+            $previousSituation = Situation::where('id', '<>', $currentSituation->id)
+                ->where('requester_id', $currentSituation->requester_id)
+                ->with([
+                    'requester',
+                    'subcategory',
+                    'register',
+                    'authorizer',
+                    'followUper',
+                    'rejecter',
+                    'familyData',
+                    'livingData',
+                    'economicData',
+                    'documentsData',
+                    'evidencesData',
+                    'receipt'
+                ])
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if (!$previousSituation) {
+                throw new \Exception('No se encontró una situación previa');
+            }
+
+            if ($internal) return $previousSituation;
+            // Log::info("SituationController ~ getPreviousSituation ~ situtation" . json_encode($previousSituation));
+
+            $response->data = ObjResponse::SuccessResponse();
+            $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
+            $response->data["result"] = $previousSituation;
+        } catch (\Exception $ex) {
+            $msg = "SituationController ~ getPreviousSituation ~ Hubo un error -> " . $ex->getMessage();
             Log::error($msg);
             $response->data = ObjResponse::CatchResponse($msg);
         }

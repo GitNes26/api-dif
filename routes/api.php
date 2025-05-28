@@ -194,6 +194,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/{id}/authorizationOrRejection", [SituationController::class, 'authorizationOrRejection']);
         Route::get("/ciudadano/{personal_info_id}/history", [SituationController::class, 'history']);
         Route::get("/{id}/returnStatusToSituation", [SituationController::class, 'returnStatusToSituation']);
+        Route::get("/{id}/getPreviousSituation", [SituationController::class, 'getPreviousSituation']);
     });
     Route::prefix("familyData")->group(function () {
         Route::get("/", [FamilyDataController::class, 'index']);
