@@ -477,7 +477,7 @@ class SituationController extends Controller
             // Obtener la situación actual y la anterior en una sola consulta
             $currentSituation = Situation::findOrFail($id);
 
-            $previousSituation = Situation::where('id', '<>', $currentSituation->id)
+            $previousSituation = Situation::where("active", true)->where('id', '<>', $currentSituation->id)
                 ->where('requester_id', $currentSituation->requester_id)
                 ->with([
                     'requester',
@@ -504,7 +504,8 @@ class SituationController extends Controller
             // Log::info("SituationController ~ getPreviousSituation ~ situtation" . json_encode($previousSituation));
 
             $response->data = ObjResponse::SuccessResponse();
-            $response->data["message"] = 'peticion satisfactoria | situacion encontrada.';
+            $response->data["message"] = 'peticion satisfactoria | situacion previa encontrada.';
+            $response->data["alert_text"] = 'Situación previa encontrada.';
             $response->data["result"] = $previousSituation;
         } catch (\Exception $ex) {
             $msg = "SituationController ~ getPreviousSituation ~ Hubo un error -> " . $ex->getMessage();

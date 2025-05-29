@@ -171,11 +171,12 @@ class DocumentDataController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            DocumentData::where('id', $id)
-                ->update([
-                    'active' => false,
-                    'deleted_at' => date('Y-m-d H:i:s')
-                ]);
+            // DocumentData::where('id', $id)
+            //     ->update([
+            //         'active' => false,
+            //         'deleted_at' => date('Y-m-d H:i:s')
+            //     ]);
+            DocumentData::where('id', $id)->delete();
 
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = "peticion satisfactoria | documento eliminada.";
@@ -229,10 +230,12 @@ class DocumentDataController extends Controller
             // echo "$request->ids";
             // $deleteIds = explode(',', $ids);
             $countDeleted = sizeof($request->ids);
-            DocumentData::whereIn('id', $request->ids)->update([
-                'active' => false,
-                'deleted_at' => date('Y-m-d H:i:s'),
-            ]);
+            // DocumentData::whereIn('id', $request->ids)->update([
+            //     'active' => false,
+            //     'deleted_at' => date('Y-m-d H:i:s'),
+            // ]);
+            DocumentData::whereIn('id', $request->ids)->delete();
+
             $response->data = ObjResponse::SuccessResponse();
             $response->data["message"] = $countDeleted == 1 ? 'peticion satisfactoria | registro eliminado.' : "peticion satisfactoria | registros eliminados ($countDeleted).";
             $response->data["alert_text"] = $countDeleted == 1 ? 'Registro eliminado' : "Registros eliminados  ($countDeleted)";
