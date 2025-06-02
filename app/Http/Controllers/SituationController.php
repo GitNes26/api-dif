@@ -455,25 +455,6 @@ class SituationController extends Controller
     {
         $response->data = ObjResponse::DefaultResponse();
         try {
-            // $currentSituation = Situation::find($id);
-            // $previousSituation = Situation::where('id', '<>', $currentSituation->id)->where('requester_id', $currentSituation->requester_id)->orderBy('id', 'desc')->limit(1)->first();
-            // // Log::info("SituationController ~ getPreviousSituation ~ Situation" . json_encode($Situation));
-            // $situation = $Situation::with([
-            //     'requester',
-            //     'subcategory',
-            //     // 'situationSetting',
-            //     'register',
-            //     'authorizer',
-            //     'followUper',
-            //     'rejecter',
-            //     'familyData',
-            //     'livingData',
-            //     'economicData',
-            //     'documentsData',
-            //     'evidencesData',
-            //     'receipt'
-            // ])->findOrFail($previousSituation->id);
-
             // Obtener la situación actual y la anterior en una sola consulta
             $currentSituation = Situation::findOrFail($id);
 
@@ -496,9 +477,9 @@ class SituationController extends Controller
                 ->orderBy('id', 'desc')
                 ->first();
 
-            if (!$previousSituation) {
-                throw new \Exception('No se encontró una situación previa');
-            }
+            // if (!$previousSituation) {
+            //     throw new \Exception('No se encontró una situación previa');
+            // }
 
             if ($internal) return $previousSituation;
             // Log::info("SituationController ~ getPreviousSituation ~ situtation" . json_encode($previousSituation));
